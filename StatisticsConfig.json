@@ -1,0 +1,9 @@
+{
+	"env":{
+		"devElastic": "http://192.168.0.253:9200",
+		"elastic": "http://localhost:9200",
+		"csvStoredFolder": "C:/Tools/CSV",
+		"dailyServiceValid": true,
+		"dailyServiceStart": "2022.10.14"
+	}
+}
