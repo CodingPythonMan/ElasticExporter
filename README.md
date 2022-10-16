@@ -1,8 +1,5 @@
 # Statistics Exporter
-- 메인화면 구성
-
-- 프로그래밍 언어
-- Spring, Java, Oracle Cloud 사용
+- ElasticSearch Index 들 정리하여 CSV 로 출력 자동화
 ## 문제상황 정리
-- 이상한 영화를 추가하면 어쩌지?
-- API를 이용해서 영화제목은 어느정도 들여와야하지 않을까?
+- Log 데이터들을 정보로 가공하기
+- C# 에서 제공하는 ElasticSearch 관련 툴인 Nest 활용
