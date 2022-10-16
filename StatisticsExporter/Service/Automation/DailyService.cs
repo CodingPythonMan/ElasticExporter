@@ -29,7 +29,7 @@ namespace StatisticsExporter.Service.Automation
             {
                 Console.WriteLine("{0} : Daily Service 활성화 상태입니다.", todayStr);
                 //int[] dailyResult = await GetDailyResult();
-                int[] dailyResult = GetDailyResult();
+                int[] dailyResult = await GetDailyResult();
                 ExportDaily(dailyResult);
             }
             else
@@ -39,18 +39,17 @@ namespace StatisticsExporter.Service.Automation
         }
 
         //public async int[] GetDailyResult()
-        public int[] GetDailyResult()
+        public async Task<int[]> GetDailyResult()
         {
             int[] dailyResult = new int[16];
 
             //await logService.RestoreGameLog(yesterdayIndex);
-            logService.RestoreGameLog(yesterdayIndex);
-            //dailyResult.AU = await logService.GetAU(yesterdayIndex, ConvertDateToIndex(today.AddDays(-2)));
+            logService.CheckElasticOn();
+            await logService.RestoreGameLog(yesterdayIndex);
             int j = 0;
             for (int i=-14; i<-1; i++)
             {
-                //dailyResult[j] = await logService.GetAU(ConvertDateToIndex(today.AddDays(i)), ConvertDateToIndex(today.AddDays(i-1)));
-                dailyResult[j] = logService.GetAU(ConvertDateToIndex(today.AddDays(i)), ConvertDateToIndex(today.AddDays(i-1)));
+                dailyResult[j] = await logService.GetAU(ConvertDateToIndex(today.AddDays(i)), ConvertDateToIndex(today.AddDays(i-1)));
                 j++;
             }
 

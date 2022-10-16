@@ -26,9 +26,9 @@ namespace StatisticsExporter.Service
                 Console.WriteLine("{0} 로그 복원에 실패했습니다.", Index);
             }
         }*/
-        public void RestoreGameLog(string Index)
+        public async Task RestoreGameLog(string Index)
         {
-            bool result = elasticSearchService.RestoreGameLog(Index);
+            bool result = await elasticSearchService.RestoreGameLog(Index);
             if (result)
             {
                 Console.WriteLine("{0} 로그 복원에 성공했습니다.", Index);
@@ -44,8 +44,7 @@ namespace StatisticsExporter.Service
             exportService.ExportAU(logDate, auCount);
         }
 
-        //public async Task<int> GetAU(string yesterdayIndex, string days2Ago)
-        public int GetAU(string yesterdayIndex, string days2Ago)
+        public async Task<int> GetAU(string yesterdayIndex, string days2Ago)
         {
             bool days2AgoExist;
             int result = 0;
@@ -55,8 +54,7 @@ namespace StatisticsExporter.Service
             sb.Append(days2Ago);
             sb.Append("\" WHERE T=101 OR T=102");
 
-            //var days2AgoResult = await elasticSearchService.GetSQLResponse(sb.ToString(), 1000000);
-            var days2AgoResult = elasticSearchService.GetSQLResponse(sb.ToString(), 1000000);
+            var days2AgoResult = await elasticSearchService.GetSQLResponse(sb.ToString(), 1000000);
             days2AgoExist = days2AgoResult.IsValid;
 
             // 전날 로그가 있을 경우
@@ -88,7 +86,7 @@ namespace StatisticsExporter.Service
                 sb.Append("\" WHERE T=101 OR T=102");
 
                 //var yesterdayResult = await elasticSearchService.GetSQLResponse(sb.ToString(), 1000000);
-                var yesterdayResult = elasticSearchService.GetSQLResponse(sb.ToString(), 1000000);
+                var yesterdayResult = await elasticSearchService.GetSQLResponse(sb.ToString(), 1000000);
 
                 loginSet = new();
                 logoutSet = new();
@@ -119,7 +117,7 @@ namespace StatisticsExporter.Service
                 sb.Append("\" WHERE T=101");
 
                 //var yesterdayResult = await elasticSearchService.GetSQLResponse(sb.ToString());
-                var yesterdayResult = elasticSearchService.GetSQLResponse(sb.ToString());
+                var yesterdayResult = await elasticSearchService.GetSQLResponse(sb.ToString());
 
                 foreach (var item in yesterdayResult.Rows)
                 {
@@ -128,6 +126,14 @@ namespace StatisticsExporter.Service
             }
 
             return result;
+        }
+
+        public void CheckElasticOn()
+        {
+            if(elasticSearchService.CheckElasticOn())
+            {
+
+            }
         }
     }
 }

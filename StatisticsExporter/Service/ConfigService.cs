@@ -17,7 +17,9 @@ namespace StatisticsExporter.Service
         public string BasePathDir { get { return _basePathDir; } }
 
         // config 기본 폴더 부터의 폴더명
-        public string PATH_CONFIG_FOLDER { get { return BasePathDir + "/"; } }
+        // 첫번째는 Release 후 사용
+        //public string PATH_CONFIG_FOLDER { get { return BasePathDir + "/"; } }
+        public string PATH_CONFIG_FOLDER { get { return BasePathDir + "/../../../../"; } }
 
         // 로딩할 config 파일들
         const string SERVER_FILE_NAME = "StatisticsConfig";
