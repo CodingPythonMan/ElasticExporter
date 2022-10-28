@@ -1,5 +1,4 @@
 ﻿using Nest;
-using StatisticsExporter.Model;
 using System;
 using System.Collections;
 using System.Collections.Generic;
