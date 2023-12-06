@@ -68,8 +68,12 @@ private:
 	bool Delete(Node* node, Node* Parent, int Data);
 	bool Find(Node* node, int Data);
 
-	int GetMaxDepth() const;
+	// Red-Black Tree 를 위한 것
+	void BalanceTree(Node* node, bool Left);
+	void RightDirectionRotate(Node* node);
+	void LeftDirectionRotate(Node* node);
 
+	int GetMaxDepth() const;
 	RowList GetRowList(int maxDepth) const;
 	vector<string> FormatRow(const RowList& rowList) const;
 	void TrimRow(vector<string>& rows);

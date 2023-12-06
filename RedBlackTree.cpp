@@ -24,7 +24,14 @@ bool RedBlackTree::Insert(int Data)
 	if (_Root == nullptr)
 	{
 		_Root = new Node;
+		// 루트 노드가 블랙인 이유
+		// 1. 레드인 경우는 두번째 삽입에서 무조건 법칙 위반. (레드-블랙)
+		// 2. 새로운 삽입이 레드인 이유는 블랙이면 무조건 법칙 위반.
+		_Root->Color = NODE_COLOR::BLACK;
 		_Root->Data = Data;
+		_Root->Left = _Nil;
+		_Root->Right = _Nil;
+
 		return true;
 	}
 
@@ -33,11 +40,16 @@ bool RedBlackTree::Insert(int Data)
 	{
 		if (Data < node->Data)
 		{
-			if (node->Left == nullptr)
+			if (node->Left == _Nil)
 			{
 				Node* newNode = new Node;
+				newNode->Parent = node;
 				newNode->Data = Data;
+				newNode->Left = _Nil;
+				newNode->Right = _Nil;
+				newNode->Color = NODE_COLOR::RED;
 				node->Left = newNode;
+				BalanceTree(newNode, true);
 				break;
 			}
 			else
@@ -51,11 +63,16 @@ bool RedBlackTree::Insert(int Data)
 		}
 		else
 		{
-			if (node->Right == nullptr)
+			if (node->Right == _Nil)
 			{
 				Node* newNode = new Node;
+				newNode->Parent = node;
 				newNode->Data = Data;
+				newNode->Left = _Nil;
+				newNode->Right = _Nil;
+				newNode->Color = NODE_COLOR::RED;
 				node->Right = newNode;
+				BalanceTree(newNode, false);
 				break;
 			}
 			else
@@ -120,6 +137,84 @@ bool RedBlackTree::Find(Node* node, int Data)
 	rightResult = Find(node->Right, Data);
 
 	return leftResult || rightResult;
+}
+
+void RedBlackTree::BalanceTree(Node* node, bool Left)
+{
+	// 부모가 검정이면 밸런싱 종료
+	if (node->Parent->Color == NODE_COLOR::BLACK)
+		return;
+
+	if (node->Parent == node->Parent->Parent->Left)
+	{
+		if (Left == false)
+		{
+			node->Parent = node->Parent->Parent;
+			// 우선 부모를 내 왼쪽으로 가리킨다.
+			node->Left = node->Parent->Left;
+			node->Left->Parent = node;
+			node->Parent->Left = node;
+
+			node = node->Left;
+			node->Left = _Nil;
+			node->Right = _Nil;
+		}
+
+		if (node->Parent->Parent->Right->Color == NODE_COLOR::BLACK)
+		{
+			RightDirectionRotate(node);
+			node = node->Parent;
+		}
+		else
+		{
+			while (node != _Root)
+			{
+				node->Parent->Parent->Color = NODE_COLOR::RED;
+				node->Parent->Color = NODE_COLOR::BLACK;
+				node->Parent->Parent->Right->Color = NODE_COLOR::BLACK;
+
+				if (node->Parent->Color == NODE_COLOR::BLACK)
+					return;
+			}
+		}	
+	}
+	else
+	{
+
+	}
+}
+
+void RedBlackTree::RightDirectionRotate(Node* node)
+{
+	// 형제 부모 -> 삼촌
+	node->Parent->Right->Parent = node->Parent->Parent->Right;
+
+	// 삼촌 왼쪽 -> 형제
+	node->Parent->Parent->Right->Left = node->Parent->Right;
+
+	// 부모 R -> G부모
+	node->Parent->Right = node->Parent->Parent;
+
+	// G부모가 루트가 아니면 부모가 더 있다고 생각할 수 있다.
+	if (node->Parent->Parent != _Root)
+	{
+		if (node->Parent->Parent->Parent->Left == node->Parent->Parent)
+		{
+			node->Parent->Parent->Parent->Left = node->Parent;
+		}
+		else if (node->Parent->Parent->Parent->Right == node->Parent->Parent)
+		{
+			node->Parent->Parent->Parent->Right = node->Parent;
+		}
+		node->Parent->Parent = node->Parent->Parent->Parent;
+	}
+
+	// G부모의 부모 -> 부모
+	node->Parent->Parent->Parent = node->Parent;
+
+	// 색깔 설정
+	node->Parent->Color = NODE_COLOR::BLACK;
+	node->Parent->Right->Color = NODE_COLOR::RED;
 }
 
 int RedBlackTree::GetMaxDepth() const
@@ -190,7 +285,18 @@ RowList RedBlackTree::GetRowList(int maxDepth) const
 		for (Node* pn : row) {
 			Cell cell;
 			if (pn) {
-				cell.Value = to_string(pn->Data);
+				if (pn == _Nil)
+				{
+					cell.Value = "N";
+				}
+				else
+				{
+					cell.Value = to_string(pn->Data);
+					if (pn->Color == NODE_COLOR::BLACK)
+						cell.Value += " B";
+					else
+						cell.Value += " R";
+				}
 				cell.Present = true;
 				rowList.back().push_back(cell);
 			}

@@ -1,39 +1,17 @@
-#include "BinaryTree.h"
+#include "RedBlackTree.h"
 #include "Test.h"
 #include <iostream>
 using namespace std;
 
 int main()
 {
-	BinaryTree binaryTree;
+	RedBlackTree tree;
+	tree.Insert(30);
+	tree.Insert(10);
+	tree.Insert(40);
+	tree.Insert(20);
+	tree.Insert(25);
+	tree.Insert(28);
 
-	binaryTree.Insert(10);
-	binaryTree.Insert(5);
-	binaryTree.Insert(15);
-
-	binaryTree.Insert(3);
-	binaryTree.Insert(13);
-	binaryTree.Insert(4);
-
-	binaryTree.Insert(6);
-	binaryTree.Insert(11);
-	binaryTree.Insert(14);
-
-	bool Result1 = binaryTree.Find(3);
-
-	binaryTree.Delete(3);
-	binaryTree.Delete(6);
-	binaryTree.Delete(15);
-
-	bool Result2 = binaryTree.Find(3);
-
-	binaryTree.Print();
-
-	cout << Result1 << "\n";
-	cout << Result2 << "\n";
-
-	Test test;
-	test.PutReliableData(3);
-	test.PutReliableData(4);
-	test.PutReliableData(5);
+	tree.Print();
 }
