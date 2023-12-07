@@ -164,45 +164,118 @@ void RedBlackTree::BalanceTree(Node* node, bool Left)
 		{
 			RightDirectionRotate(node);
 			node = node->Parent;
+			return;
 		}
-		else
-		{
-			while (node != _Root)
-			{
-				node->Parent->Parent->Color = NODE_COLOR::RED;
-				node->Parent->Color = NODE_COLOR::BLACK;
-				node->Parent->Parent->Right->Color = NODE_COLOR::BLACK;
 
-				if (node->Parent->Color == NODE_COLOR::BLACK)
-					return;
+		while (1)
+		{
+			node->Parent->Parent->Color = NODE_COLOR::RED;
+			node->Parent->Color = NODE_COLOR::BLACK;
+			node->Parent->Parent->Right->Color = NODE_COLOR::BLACK;
+
+			node = node->Parent->Parent;
+
+			// 루트면 return
+			if (node == _Root)
+				break;
+
+			// 조건 만족
+			if (node->Parent->Color == NODE_COLOR::BLACK)
+				break;
+
+			if (node->Parent == _Root && node->Parent->Color == NODE_COLOR::RED)
+			{
+				_Root->Color = NODE_COLOR::BLACK;
+				break;
 			}
-		}	
+
+			if (node->Parent->Parent->Right->Color == NODE_COLOR::BLACK)
+			{
+				RightDirectionRotate(node);
+				node = node->Parent;
+				return;
+			}
+		}
 	}
 	else
 	{
+		if (Left == true)
+		{
+			node->Parent = node->Parent->Parent;
+			// 우선 부모를 내 왼쪽으로 가리킨다.
+			node->Right = node->Parent->Right;
+			node->Right->Parent = node;
+			node->Parent->Right = node;
 
+			node = node->Right;
+			node->Left = _Nil;
+			node->Right = _Nil;
+		}
+
+		if (node->Parent->Parent->Left->Color == NODE_COLOR::BLACK)
+		{
+			LeftDirectionRotate(node);
+			node = node->Parent;
+			return;
+		}
+
+		while (1)
+		{
+			node->Parent->Parent->Color = NODE_COLOR::RED;
+			node->Parent->Color = NODE_COLOR::BLACK;
+			node->Parent->Parent->Left->Color = NODE_COLOR::BLACK;
+
+			node = node->Parent->Parent;
+
+			// 루트면 return
+			if (node == _Root)
+				break;
+
+			// 조건 만족
+			if (node->Parent->Color == NODE_COLOR::BLACK)
+				break;
+
+			if (node->Parent == _Root && node->Parent->Color == NODE_COLOR::RED)
+			{
+				_Root->Color = NODE_COLOR::BLACK;
+				break;
+			}
+
+			if (node->Parent->Parent->Left->Color == NODE_COLOR::BLACK)
+			{
+				LeftDirectionRotate(node);
+				node = node->Parent;
+				return;
+			}
+		}
 	}
 }
 
 void RedBlackTree::RightDirectionRotate(Node* node)
 {
-	// 형제 부모 -> 삼촌
-	node->Parent->Right->Parent = node->Parent->Parent->Right;
+	// 형제 부모 -> G부모
+	node->Parent->Right->Parent = node->Parent->Parent;
 
-	// 삼촌 왼쪽 -> 형제
-	node->Parent->Parent->Right->Left = node->Parent->Right;
+	// G부모 왼쪽 -> 형제
+	node->Parent->Parent->Left = node->Parent->Right;
 
 	// 부모 R -> G부모
 	node->Parent->Right = node->Parent->Parent;
 
+	// G부모가 루트였다면 루트 바꿈 처리
+	if (node->Parent->Parent == _Root)
+	{
+		_Root = node->Parent;
+		_Root->Parent = nullptr;
+	}
 	// G부모가 루트가 아니면 부모가 더 있다고 생각할 수 있다.
-	if (node->Parent->Parent != _Root)
+	else
 	{
 		if (node->Parent->Parent->Parent->Left == node->Parent->Parent)
 		{
 			node->Parent->Parent->Parent->Left = node->Parent;
 		}
-		else if (node->Parent->Parent->Parent->Right == node->Parent->Parent)
+		else
 		{
 			node->Parent->Parent->Parent->Right = node->Parent;
 		}
@@ -210,11 +283,51 @@ void RedBlackTree::RightDirectionRotate(Node* node)
 	}
 
 	// G부모의 부모 -> 부모
-	node->Parent->Parent->Parent = node->Parent;
+	node->Parent->Right->Parent = node->Parent;
 
 	// 색깔 설정
 	node->Parent->Color = NODE_COLOR::BLACK;
 	node->Parent->Right->Color = NODE_COLOR::RED;
+}
+
+void RedBlackTree::LeftDirectionRotate(Node* node)
+{
+	// 형제 부모 -> G부모
+	node->Parent->Left->Parent = node->Parent->Parent;
+
+	// G부모 오른쪽 -> 형제
+	node->Parent->Parent->Right = node->Parent->Left;
+
+	// 부모 L -> G부모
+	node->Parent->Left = node->Parent->Parent;
+
+	
+	// G부모가 루트였다면 루트 바꿈 처리
+	if (node->Parent->Parent == _Root)
+	{
+		_Root = node->Parent;
+		_Root->Parent = nullptr;
+	}
+	// G부모가 루트가 아니면 부모가 더 있다고 생각할 수 있다.
+	else
+	{
+		if (node->Parent->Parent->Parent->Left == node->Parent->Parent)
+		{
+			node->Parent->Parent->Parent->Left = node->Parent;
+		}
+		else
+		{
+			node->Parent->Parent->Parent->Right = node->Parent;
+		}
+		node->Parent->Parent = node->Parent->Parent->Parent;
+	}
+
+	// G부모의 부모(이미 G부모는 부모의 L로 이동) -> 부모
+	node->Parent->Left->Parent = node->Parent;
+
+	// 색깔 설정
+	node->Parent->Color = NODE_COLOR::BLACK;
+	node->Parent->Left->Color = NODE_COLOR::RED;
 }
 
 int RedBlackTree::GetMaxDepth() const
