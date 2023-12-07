@@ -12,15 +12,10 @@ int main()
 
 	for (int i = 0; i < 30; i++)
 	{
-		int random = rand() % 30;
+		int random = rand() % 100;
 		test.PutReliableData(random);
-
-		if (i == 20)
-			tree.Insert(random);
-
 		tree.Insert(random);
 		tree.Print();
+		test.Print();
 	}
-
-	test.Print();
 }

@@ -72,6 +72,7 @@ private:
 	void BalanceTree(Node* node, bool Left);
 	void RightDirectionRotate(Node* node);
 	void LeftDirectionRotate(Node* node);
+	void BalanceProc(Node* node);
 
 	int GetMaxDepth() const;
 	RowList GetRowList(int maxDepth) const;

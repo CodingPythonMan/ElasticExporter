@@ -1,12 +1,16 @@
 #include <queue>
 #include <vector>
+using namespace std;
 
 class Test {
 public:
+	Test();
+	virtual ~Test();
+
 	bool PutReliableData(int Data);
 	
 	void Print();
 
 private:
-	std::priority_queue<int, std::vector<int>, std::greater<int>> ReliableQueue;
+	vector<int> ReliableList;
 };

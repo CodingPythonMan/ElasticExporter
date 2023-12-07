@@ -1,21 +1,28 @@
 #include "Test.h"
 #include <iostream>
-using namespace std;
+
+Test::Test()
+{
+	make_heap(ReliableList.begin(), ReliableList.end());
+}
+
+Test::~Test()
+{
+}
 
 bool Test::PutReliableData(int Data)
 {
-	ReliableQueue.push(Data);
+	ReliableList.push_back(Data);
 
-	return false;
+	return true;
 }
 
 void Test::Print()
 {
-	cout << "q = ( ";
-	while (!ReliableQueue.empty())
+	cout << "List (";
+	for (int elem : ReliableList)
 	{
-		cout << ReliableQueue.top() << " ";
-		ReliableQueue.pop();
+		cout << elem << ", ";
 	}
 	cout << ")" << "\n";
 }

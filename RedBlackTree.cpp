@@ -167,37 +167,14 @@ void RedBlackTree::BalanceTree(Node* node, bool Left)
 			return;
 		}
 
-		while (1)
-		{
-			node->Parent->Parent->Color = NODE_COLOR::RED;
-			node->Parent->Color = NODE_COLOR::BLACK;
-			node->Parent->Parent->Right->Color = NODE_COLOR::BLACK;
+		node->Parent->Parent->Color = NODE_COLOR::RED;
+		node->Parent->Color = NODE_COLOR::BLACK;
+		node->Parent->Parent->Right->Color = NODE_COLOR::BLACK;
 
-			node = node->Parent->Parent;
+		node = node->Parent->Parent;
 
-			// 루트면 return
-			if (node == _Root)
-				break;
-
-			// 조건 만족
-			if (node->Parent->Color == NODE_COLOR::BLACK)
-				break;
-
-			// 여기까지 온다면 부모가 Root 인데 Red 일 경우
-			if (node->Parent == _Root)
-			{
-				_Root->Color = NODE_COLOR::BLACK;
-				break;
-			}
-
-			// 부모가 Root 아니므로 다시 한번 G부모까지 볼 수 있다
-			if (node->Parent->Parent->Right->Color == NODE_COLOR::BLACK)
-			{
-				RightDirectionRotate(node);
-				node = node->Parent;
-				return;
-			}
-		}
+		// 밸런싱의 무한 반복을 이쪽에서 진행한다.
+		BalanceProc(node);
 	}
 	else
 	{
@@ -221,37 +198,14 @@ void RedBlackTree::BalanceTree(Node* node, bool Left)
 			return;
 		}
 
-		while (1)
-		{
-			node->Parent->Parent->Color = NODE_COLOR::RED;
-			node->Parent->Color = NODE_COLOR::BLACK;
-			node->Parent->Parent->Left->Color = NODE_COLOR::BLACK;
+		node->Parent->Parent->Color = NODE_COLOR::RED;
+		node->Parent->Color = NODE_COLOR::BLACK;
+		node->Parent->Parent->Left->Color = NODE_COLOR::BLACK;
 
-			node = node->Parent->Parent;
+		node = node->Parent->Parent;
 
-			// 루트면 return
-			if (node == _Root)
-				break;
-
-			// 조건 만족
-			if (node->Parent->Color == NODE_COLOR::BLACK)
-				break;
-
-			// 여기까지 온다면 부모가 Root 인데 Red 일 경우
-			if (node->Parent == _Root)
-			{
-				_Root->Color = NODE_COLOR::BLACK;
-				break;
-			}
-
-			// 부모가 Root 아니므로 다시 한번 G부모까지 볼 수 있다
-			if (node->Parent->Parent->Left->Color == NODE_COLOR::BLACK)
-			{
-				LeftDirectionRotate(node);
-				node = node->Parent;
-				return;
-			}
-		}
+		// 밸런싱의 무한 반복을 이쪽에서 진행한다.
+		BalanceProc(node);
 	}
 }
 
@@ -331,6 +285,63 @@ void RedBlackTree::LeftDirectionRotate(Node* node)
 	// 색깔 설정
 	node->Parent->Color = NODE_COLOR::BLACK;
 	node->Parent->Left->Color = NODE_COLOR::RED;
+}
+
+void RedBlackTree::BalanceProc(Node* node)
+{
+	while (1)
+	{
+		// 루트면 return
+		if (node == _Root)
+			return;
+
+		// 조건 만족
+		if (node->Parent->Color == NODE_COLOR::BLACK)
+			return;
+
+		// 여기까지 온다면 부모가 Root 인데 Red 일 경우
+		if (node->Parent == _Root)
+		{
+			_Root->Color = NODE_COLOR::BLACK;
+			return;
+		}
+
+		// 부모가 Root 아니므로 다시 한번 G부모까지 볼 수 있다
+		if (node->Parent == node->Parent->Parent->Left)
+		{
+			if (node->Parent->Parent->Right->Color == NODE_COLOR::BLACK)
+			{
+				RightDirectionRotate(node);
+				node = node->Parent;
+				return;
+			}
+			else
+			{
+				node->Parent->Parent->Color = NODE_COLOR::RED;
+				node->Parent->Color = NODE_COLOR::BLACK;
+				node->Parent->Parent->Right->Color = NODE_COLOR::BLACK;
+
+				node = node->Parent->Parent;
+			}
+		}
+		else
+		{
+			if (node->Parent->Parent->Left->Color == NODE_COLOR::BLACK)
+			{
+				LeftDirectionRotate(node);
+				node = node->Parent;
+				return;
+			}
+			else
+			{
+				node->Parent->Parent->Color = NODE_COLOR::RED;
+				node->Parent->Color = NODE_COLOR::BLACK;
+				node->Parent->Parent->Left->Color = NODE_COLOR::BLACK;
+
+				node = node->Parent->Parent;
+			}
+		}
+	}
 }
 
 int RedBlackTree::GetMaxDepth() const
@@ -427,63 +438,65 @@ RowList RedBlackTree::GetRowList(int maxDepth) const
 
 vector<string> RedBlackTree::FormatRow(const RowList& rowList) const
 {
-	size_t cell_width = 0;
-	for (const auto& row_disp : rowList)
+	size_t cellWidth = 0;
+	for (const auto& row : rowList)
 	{
-		for (const auto& cd : row_disp)
+		for (const auto& cell : row)
 		{
-			if (cd.Present && cd.Value.length() > cell_width)
+			if (cell.Present && cell.Value.length() > cellWidth)
 			{
-				cell_width = cd.Value.length();
+				cellWidth = cell.Value.length();
 			}
 		}
 	}
 
-	if (cell_width % 2 == 0)
-		cell_width++;
+	if (cellWidth % 2 == 0)
+		cellWidth++;
 
-	if (cell_width < 3) cell_width = 3;
+	if (cellWidth < 3) 
+		cellWidth = 3;
 
-	vector<string> formatted_rows;
+	vector<string> formattedRows;
 
-	size_t row_count = rowList.size();
+	size_t rowCount = rowList.size();
 
-	int row_elem_count = 1i64 << (row_count - 1);
+	int rowElementCount = 1i64 << (rowCount - 1);
 
 	size_t left_pad = 0;
 
+	for (int r = 0; r < rowCount; ++r) {
+		const auto& cd_row = rowList[rowCount - r - 1];
 
-	for (int r = 0; r < row_count; ++r) {
-		const auto& cd_row = rowList[row_count - r - 1];
-
-		size_t space = (1i64 << r) * (cell_width + 1) / 2 - 1;
+		size_t space = (1i64 << r) * (cellWidth + 1) / 2 - 1;
 		string row;
 
-		for (int c = 0; c < row_elem_count; ++c) {
+		for (int c = 0; c < rowElementCount; ++c) {
 			row += string(c ? left_pad * 2 + 1 : left_pad, ' ');
-			if (cd_row[c].Present) {
+			if (cd_row[c].Present) 
+			{
 				const string& valstr = cd_row[c].Value;
-				size_t long_padding = cell_width - valstr.length();
+				size_t long_padding = cellWidth - valstr.length();
 				size_t short_padding = long_padding / 2;
 				long_padding -= short_padding;
 				row += string(c % 2 ? short_padding : long_padding, ' ');
 				row += valstr;
 				row += string(c % 2 ? long_padding : short_padding, ' ');
 			}
-			else {
-				// This position is empty, Nodeless...
-				row += string(cell_width, ' ');
+			else 
+			{
+				row += string(cellWidth, ' ');
 			}
 		}
-		formatted_rows.push_back(row);
+		formattedRows.push_back(row);
 
-		if (row_elem_count == 1) break;
+		if (rowElementCount == 1) 
+			break;
 
 		size_t left_space = space + 1;
 		size_t right_space = space - 1;
 		for (int sr = 0; sr < space; ++sr) {
 			string row;
-			for (int c = 0; c < row_elem_count; ++c) {
+			for (int c = 0; c < rowElementCount; ++c) {
 				if (c % 2 == 0) {
 					row += string(c ? left_space * 2 + 1 : left_space, ' ');
 					row += cd_row[c].Present ? '/' : ' ';
@@ -494,17 +507,17 @@ vector<string> RedBlackTree::FormatRow(const RowList& rowList) const
 					row += cd_row[c].Present ? '\\' : ' ';
 				}
 			}
-			formatted_rows.push_back(row);
+			formattedRows.push_back(row);
 			++left_space;
 			--right_space;
 		}
 		left_pad += space + 1;
-		row_elem_count /= 2;
+		rowElementCount /= 2;
 	}
 
-	reverse(formatted_rows.begin(), formatted_rows.end());
+	reverse(formattedRows.begin(), formattedRows.end());
 
-	return formatted_rows;
+	return formattedRows;
 }
 
 void RedBlackTree::TrimRow(vector<string>& rows)
