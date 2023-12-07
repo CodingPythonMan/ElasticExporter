@@ -3,10 +3,10 @@
 
 class Test {
 public:
-	bool PutTestData(int Data);
 	bool PutReliableData(int Data);
+	
+	void Print();
 
 private:
-	std::priority_queue<int, std::vector<int>, std::greater<int>> MyQueue;
 	std::priority_queue<int, std::vector<int>, std::greater<int>> ReliableQueue;
 };

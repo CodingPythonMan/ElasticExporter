@@ -6,12 +6,21 @@ using namespace std;
 int main()
 {
 	RedBlackTree tree;
-	tree.Insert(30);
-	tree.Insert(10);
-	tree.Insert(40);
-	tree.Insert(20);
-	tree.Insert(25);
-	tree.Insert(28);
+	srand(3);
 
-	tree.Print();
+	Test test;
+
+	for (int i = 0; i < 30; i++)
+	{
+		int random = rand() % 30;
+		test.PutReliableData(random);
+
+		if (i == 20)
+			tree.Insert(random);
+
+		tree.Insert(random);
+		tree.Print();
+	}
+
+	test.Print();
 }

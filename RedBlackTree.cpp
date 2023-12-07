@@ -183,12 +183,14 @@ void RedBlackTree::BalanceTree(Node* node, bool Left)
 			if (node->Parent->Color == NODE_COLOR::BLACK)
 				break;
 
-			if (node->Parent == _Root && node->Parent->Color == NODE_COLOR::RED)
+			// 여기까지 온다면 부모가 Root 인데 Red 일 경우
+			if (node->Parent == _Root)
 			{
 				_Root->Color = NODE_COLOR::BLACK;
 				break;
 			}
 
+			// 부모가 Root 아니므로 다시 한번 G부모까지 볼 수 있다
 			if (node->Parent->Parent->Right->Color == NODE_COLOR::BLACK)
 			{
 				RightDirectionRotate(node);
@@ -202,7 +204,7 @@ void RedBlackTree::BalanceTree(Node* node, bool Left)
 		if (Left == true)
 		{
 			node->Parent = node->Parent->Parent;
-			// 우선 부모를 내 왼쪽으로 가리킨다.
+			// 우선 부모를 내 오른쪽으로 가리킨다.
 			node->Right = node->Parent->Right;
 			node->Right->Parent = node;
 			node->Parent->Right = node;
@@ -235,12 +237,14 @@ void RedBlackTree::BalanceTree(Node* node, bool Left)
 			if (node->Parent->Color == NODE_COLOR::BLACK)
 				break;
 
-			if (node->Parent == _Root && node->Parent->Color == NODE_COLOR::RED)
+			// 여기까지 온다면 부모가 Root 인데 Red 일 경우
+			if (node->Parent == _Root)
 			{
 				_Root->Color = NODE_COLOR::BLACK;
 				break;
 			}
 
+			// 부모가 Root 아니므로 다시 한번 G부모까지 볼 수 있다
 			if (node->Parent->Parent->Left->Color == NODE_COLOR::BLACK)
 			{
 				LeftDirectionRotate(node);
@@ -301,7 +305,6 @@ void RedBlackTree::LeftDirectionRotate(Node* node)
 	// 부모 L -> G부모
 	node->Parent->Left = node->Parent->Parent;
 
-	
 	// G부모가 루트였다면 루트 바꿈 처리
 	if (node->Parent->Parent == _Root)
 	{
