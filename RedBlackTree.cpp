@@ -151,7 +151,7 @@ void RedBlackTree::BalanceTree(Node* node)
 		{
 			if (node == node->Parent->Right)
 			{
-				RightToParent(node);
+				node = RightToParent(node);
 			}
 
 			RightDirectionRotate(node);
@@ -174,7 +174,7 @@ void RedBlackTree::BalanceTree(Node* node)
 		{
 			if (node == node->Parent->Left)
 			{
-				LeftToParent(node);
+				node = LeftToParent(node);
 			}
 
 			LeftDirectionRotate(node);
@@ -193,30 +193,30 @@ void RedBlackTree::BalanceTree(Node* node)
 	}
 }
 
-void RedBlackTree::RightToParent(Node* node)
+Node* RedBlackTree::RightToParent(Node* node)
 {
 	node->Parent = node->Parent->Parent;
 	// 우선 부모를 내 왼쪽으로 가리킨다.
 	node->Left = node->Parent->Left;
 	node->Left->Parent = node;
 	node->Parent->Left = node;
-
-	node = node->Left;
 	node->Left = _Nil;
 	node->Right = _Nil;
+
+	return node->Left;
 }
 
-void RedBlackTree::LeftToParent(Node* node)
+Node* RedBlackTree::LeftToParent(Node* node)
 {
 	node->Parent = node->Parent->Parent;
 	// 우선 부모를 내 오른쪽으로 가리킨다.
 	node->Right = node->Parent->Right;
 	node->Right->Parent = node;
 	node->Parent->Right = node;
-
-	node = node->Right;
 	node->Left = _Nil;
 	node->Right = _Nil;
+
+	return node->Right;
 }
 
 void RedBlackTree::RightDirectionRotate(Node* node)
@@ -321,9 +321,9 @@ void RedBlackTree::BalanceProc(Node* node)
 		{
 			if (node->Parent->Parent->Right->Color == NODE_COLOR::BLACK)
 			{
-				if (node == node->Parent->Left)
+				if (node == node->Parent->Right)
 				{
-					RightToParent(node);
+					node = RightToParent(node);
 				}
 
 				RightDirectionRotate(node);
@@ -343,9 +343,9 @@ void RedBlackTree::BalanceProc(Node* node)
 		{
 			if (node->Parent->Parent->Left->Color == NODE_COLOR::BLACK)
 			{
-				if (node == node->Parent->Right)
+				if (node == node->Parent->Left)
 				{
-					LeftToParent(node);
+					node = LeftToParent(node);
 				}
 
 				LeftDirectionRotate(node);

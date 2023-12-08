@@ -7,51 +7,51 @@ enum class NODE_COLOR
 	RED
 };
 
+struct Node {
+	Node* Parent;
+	Node* Left;
+	Node* Right;
+
+	NODE_COLOR Color;
+
+	int Data;
+
+	Node()
+	{
+		Data = 0;
+		Parent = nullptr;
+		Left = nullptr;
+		Right = nullptr;
+		Color = NODE_COLOR::RED;
+	}
+
+	int GetMaxDepth() const
+	{
+		int maxDepth;
+		int leftDepth = 0;
+		int rightDepth = 0;
+
+		if (Left != nullptr)
+			leftDepth = Left->GetMaxDepth();
+
+		if (Right != nullptr)
+			rightDepth = Right->GetMaxDepth();
+
+		if (leftDepth > rightDepth)
+		{
+			maxDepth = leftDepth + 1;
+		}
+		else
+		{
+			maxDepth = rightDepth + 1;
+		}
+
+		return maxDepth;
+	}
+};
+
 class RedBlackTree
 {
-	struct Node {
-		Node* Parent;
-		Node* Left;
-		Node* Right;
-
-		NODE_COLOR Color;
-
-		int Data;
-
-		Node()
-		{
-			Data = 0;
-			Parent = nullptr;
-			Left = nullptr;
-			Right = nullptr;
-			Color = NODE_COLOR::RED;
-		}
-
-		int GetMaxDepth() const
-		{
-			int maxDepth;
-			int leftDepth = 0;
-			int rightDepth = 0;
-
-			if (Left != nullptr)
-				leftDepth = Left->GetMaxDepth();
-
-			if (Right != nullptr)
-				rightDepth = Right->GetMaxDepth();
-
-			if (leftDepth > rightDepth)
-			{
-				maxDepth = leftDepth + 1;
-			}
-			else
-			{
-				maxDepth = rightDepth + 1;
-			}
-
-			return maxDepth;
-		}
-	};
-
 public:
 	RedBlackTree();
 	virtual ~RedBlackTree();
@@ -71,8 +71,8 @@ private:
 	// Red-Black Tree 를 위한 것
 	void BalanceTree(Node* node);
 
-	void RightToParent(Node* node);
-	void LeftToParent(Node* node);
+	Node* RightToParent(Node* node);
+	Node* LeftToParent(Node* node);
 
 	void RightDirectionRotate(Node* node);
 	void LeftDirectionRotate(Node* node);
