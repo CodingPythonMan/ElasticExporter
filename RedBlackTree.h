@@ -69,7 +69,11 @@ private:
 	bool Find(Node* node, int Data);
 
 	// Red-Black Tree 를 위한 것
-	void BalanceTree(Node* node, bool Left);
+	void BalanceTree(Node* node);
+
+	void RightToParent(Node* node);
+	void LeftToParent(Node* node);
+
 	void RightDirectionRotate(Node* node);
 	void LeftDirectionRotate(Node* node);
 	void BalanceProc(Node* node);
