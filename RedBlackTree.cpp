@@ -118,7 +118,72 @@ void RedBlackTree::Print()
 
 bool RedBlackTree::Delete(Node* node, Node* Parent, int Data)
 {
-	return false;
+	if (node == _Nil)
+		return false;
+
+	bool leftResult, rightResult;
+	leftResult = Delete(node->Left, node, Data);
+	// 데이터에 대한 값 처리할 때 하위 있는지 확인 필요
+	if (Data == node->Data)
+	{
+		// 자식 둘다 있을 경우
+		if (node->Left != _Nil && node->Right != _Nil)
+		{
+			// 왼쪽의 맨 오른쪽으로 접근하고, 해당 node 설정 후 삭제.
+			node = node->Left;
+			while (node == _Nil)
+			{
+				Parent = node;
+				node = node->Right;
+			}
+		}
+
+		// 왼쪽 자식이 있는 경우
+		if (node->Left != _Nil)
+		{
+			if (Parent->Left == node)
+			{
+				Parent->Left = node->Left;
+			}
+			else
+			{
+				Parent->Right = node->Left;
+			}
+		}
+		else if (node->Right != _Nil)
+		{
+			if (Parent->Left == node)
+			{
+				Parent->Left = node->Right;
+			}
+			else
+			{
+				Parent->Right = node->Right;
+			}
+		}
+		else
+		{
+			// 자식이 없는 경우
+			if (Parent->Left == node)
+			{
+				Parent->Left = _Nil;
+			}
+			else
+			{
+				Parent->Right = _Nil;
+			}
+		}
+		return true;
+	}
+	rightResult = Delete(node->Right, node, Data);
+
+	bool result = leftResult || rightResult;
+	if (true == result)
+	{
+		DeleteBalance(node);
+	}
+
+	return result;
 }
 
 bool RedBlackTree::Find(Node* node, int Data)
@@ -194,6 +259,10 @@ void RedBlackTree::InsertBalance(Node* node)
 		// 밸런싱의 무한 반복을 이쪽에서 진행한다.
 		BalanceProc(node);
 	}
+}
+
+void RedBlackTree::DeleteBalance(Node* node)
+{
 }
 
 Node* RedBlackTree::RightToParent(Node* node)
