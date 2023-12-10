@@ -152,6 +152,8 @@ void RedBlackTree::BalanceTree(Node* node)
 			if (node == node->Parent->Right)
 			{
 				node = RightToParent(node);
+				node->Left = _Nil;
+				node->Right = _Nil;
 			}
 
 			RightDirectionRotate(node);
@@ -175,6 +177,8 @@ void RedBlackTree::BalanceTree(Node* node)
 			if (node == node->Parent->Left)
 			{
 				node = LeftToParent(node);
+				node->Left = _Nil;
+				node->Right = _Nil;
 			}
 
 			LeftDirectionRotate(node);
@@ -200,9 +204,7 @@ Node* RedBlackTree::RightToParent(Node* node)
 	node->Left = node->Parent->Left;
 	node->Left->Parent = node;
 	node->Parent->Left = node;
-	node->Left = _Nil;
-	node->Right = _Nil;
-
+	
 	return node->Left;
 }
 
@@ -213,8 +215,6 @@ Node* RedBlackTree::LeftToParent(Node* node)
 	node->Right = node->Parent->Right;
 	node->Right->Parent = node;
 	node->Parent->Right = node;
-	node->Left = _Nil;
-	node->Right = _Nil;
 
 	return node->Right;
 }
@@ -324,6 +324,8 @@ void RedBlackTree::BalanceProc(Node* node)
 				if (node == node->Parent->Right)
 				{
 					node = RightToParent(node);
+					node->Left = _Nil;
+					node->Right = _Nil;
 				}
 
 				RightDirectionRotate(node);
@@ -346,6 +348,8 @@ void RedBlackTree::BalanceProc(Node* node)
 				if (node == node->Parent->Left)
 				{
 					node = LeftToParent(node);
+					node->Left = _Nil;
+					node->Right = _Nil;
 				}
 
 				LeftDirectionRotate(node);
