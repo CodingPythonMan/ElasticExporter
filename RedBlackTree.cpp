@@ -49,7 +49,7 @@ bool RedBlackTree::Insert(int Data)
 				newNode->Right = _Nil;
 				newNode->Color = NODE_COLOR::RED;
 				node->Left = newNode;
-				BalanceTree(newNode);
+				InsertBalance(newNode);
 				break;
 			}
 			else
@@ -72,7 +72,7 @@ bool RedBlackTree::Insert(int Data)
 				newNode->Right = _Nil;
 				newNode->Color = NODE_COLOR::RED;
 				node->Right = newNode;
-				BalanceTree(newNode);
+				InsertBalance(newNode);
 				break;
 			}
 			else
@@ -87,7 +87,6 @@ bool RedBlackTree::Insert(int Data)
 
 bool RedBlackTree::Delete(int Data)
 {
-	// 하위 두개 있으면 오류날 확률 있음
 	return Delete(_Root, nullptr, Data);
 }
 
@@ -139,7 +138,7 @@ bool RedBlackTree::Find(Node* node, int Data)
 	return leftResult || rightResult;
 }
 
-void RedBlackTree::BalanceTree(Node* node)
+void RedBlackTree::InsertBalance(Node* node)
 {
 	// 부모가 검정이면 밸런싱 종료
 	if (node->Parent->Color == NODE_COLOR::BLACK)
