@@ -76,6 +76,7 @@ private:
 
 	Node* RightToParent(Node* node);
 	Node* LeftToParent(Node* node);
+	void LineToParent(Node* node);
 
 	void RightDirectionRotate(Node* node);
 	void LeftDirectionRotate(Node* node);

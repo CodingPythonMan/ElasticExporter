@@ -253,7 +253,7 @@ void RedBlackTree::InsertBalance(Node* node)
 				node->Right = _Nil;
 			}
 
-			RightDirectionRotate(node);
+			RightDirectionRotate(node->Parent);
 			// 색깔 설정
 			node->Parent->Color = NODE_COLOR::BLACK;
 			node->Parent->Right->Color = NODE_COLOR::RED;
@@ -282,7 +282,8 @@ void RedBlackTree::InsertBalance(Node* node)
 				node->Right = _Nil;
 			}
 
-			LeftDirectionRotate(node);
+			// 좌회전
+			LeftDirectionRotate(node->Parent);
 			// 색깔 설정
 			node->Parent->Color = NODE_COLOR::BLACK;
 			node->Parent->Left->Color = NODE_COLOR::RED;
@@ -362,74 +363,53 @@ Node* RedBlackTree::LeftToParent(Node* node)
 	return node->Right;
 }
 
-void RedBlackTree::RightDirectionRotate(Node* node)
+void RedBlackTree::LineToParent(Node* node)
 {
-	// 형제 부모 -> G부모
-	node->Parent->Right->Parent = node->Parent->Parent;
-
-	// G부모 왼쪽 -> 형제
-	node->Parent->Parent->Left = node->Parent->Right;
-
-	// 부모 R -> G부모
-	node->Parent->Right = node->Parent->Parent;
-
-	// G부모가 루트였다면 루트 바꿈 처리
-	if (node->Parent->Parent == _Root)
+	if (node->Parent == _Root)
 	{
-		_Root = node->Parent;
+		_Root = node;
 		_Root->Parent = nullptr;
 	}
-	// G부모가 루트가 아니면 부모가 더 있다고 생각할 수 있다.
 	else
 	{
-		if (node->Parent->Parent->Parent->Left == node->Parent->Parent)
+		if (node->Parent->Parent->Left == node->Parent)
 		{
-			node->Parent->Parent->Parent->Left = node->Parent;
+			node->Parent->Parent->Left = node;
 		}
 		else
 		{
-			node->Parent->Parent->Parent->Right = node->Parent;
+			node->Parent->Parent->Right = node;
 		}
-		node->Parent->Parent = node->Parent->Parent->Parent;
+		node->Parent = node->Parent->Parent;
 	}
+}
 
-	// G부모의 부모 -> 부모
-	node->Parent->Right->Parent = node->Parent;
+void RedBlackTree::RightDirectionRotate(Node* node)
+{
+	// 내 부모는 오른 자식의 부모가 된다.
+	node->Right->Parent = node->Parent;
+	// 내 오른쪽 자식은 부모의 왼쪽이 된다.
+	node->Parent->Left = node->Right;
+	// 부모가 오른 자식이 된다.
+	node->Right = node->Parent;
+	// 내 오른쪽의 부모가 된다.
+	node->Right->Parent = node;
+
+	LineToParent(node);
 }
 
 void RedBlackTree::LeftDirectionRotate(Node* node)
 {
-	// 형제 부모 -> G부모
-	node->Parent->Left->Parent = node->Parent->Parent;
+	// 내 부모는 왼쪽 자식의 부모가 된다.
+	node->Left->Parent = node->Parent;
+	// 왼쪽으로 넘어갈 부모가 오른 자식으로 내 왼쪽 자식을 갖는다.
+	node->Parent->Right = node->Left;
+	// 부모가 왼쪽 자식이 된다.
+	node->Left = node->Parent;
+	// 내 왼쪽의 부모가 된다.
+	node->Left->Parent = node;
 
-	// G부모 오른쪽 -> 형제
-	node->Parent->Parent->Right = node->Parent->Left;
-
-	// 부모 L -> G부모
-	node->Parent->Left = node->Parent->Parent;
-
-	// G부모가 루트였다면 루트 바꿈 처리
-	if (node->Parent->Parent == _Root)
-	{
-		_Root = node->Parent;
-		_Root->Parent = nullptr;
-	}
-	// G부모가 루트가 아니면 부모가 더 있다고 생각할 수 있다.
-	else
-	{
-		if (node->Parent->Parent->Parent->Left == node->Parent->Parent)
-		{
-			node->Parent->Parent->Parent->Left = node->Parent;
-		}
-		else
-		{
-			node->Parent->Parent->Parent->Right = node->Parent;
-		}
-		node->Parent->Parent = node->Parent->Parent->Parent;
-	}
-
-	// G부모의 부모(이미 G부모는 부모의 L로 이동) -> 부모
-	node->Parent->Left->Parent = node->Parent;
+	LineToParent(node);
 }
 
 void RedBlackTree::BalanceProc(Node* node)
@@ -463,7 +443,7 @@ void RedBlackTree::BalanceProc(Node* node)
 					node->Right = _Nil;
 				}
 
-				RightDirectionRotate(node);
+				RightDirectionRotate(node->Parent);
 				// 색깔 설정
 				node->Parent->Color = NODE_COLOR::BLACK;
 				node->Parent->Right->Color = NODE_COLOR::RED;
@@ -491,7 +471,7 @@ void RedBlackTree::BalanceProc(Node* node)
 					node->Right = _Nil;
 				}
 
-				LeftDirectionRotate(node);
+				LeftDirectionRotate(node->Parent);
 				// 색깔 설정
 				node->Parent->Color = NODE_COLOR::BLACK;
 				node->Parent->Left->Color = NODE_COLOR::RED;

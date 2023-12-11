@@ -5,7 +5,19 @@ using namespace std;
 
 void TestAutoTree()
 {
+	RedBlackTree tree;
+	srand(3);
 
+	Test test;
+
+	for (int i = 0; i < 10; i++)
+	{
+		int random = rand() % 100;
+		test.PutReliableData(random);
+		tree.Insert(random);
+		tree.Print();
+		test.Print();
+	}
 }
 
 void TestManualTree()
@@ -68,5 +80,6 @@ void TestManualTree()
 
 int main()
 {
-	TestManualTree();
+	//TestManualTree();
+	TestAutoTree();
 }
