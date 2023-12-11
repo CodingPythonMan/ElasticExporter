@@ -73,9 +73,6 @@ private:
 	// Red-Black Tree 를 위한 것
 	void InsertBalance(Node* node);
 	void DeleteBalance(Node* node);
-
-	Node* RightToParent(Node* node);
-	Node* LeftToParent(Node* node);
 	void LineToParent(Node* node);
 
 	void RightDirectionRotate(Node* node);

@@ -80,6 +80,6 @@ void TestManualTree()
 
 int main()
 {
-	//TestManualTree();
-	TestAutoTree();
+	TestManualTree();
+	//TestAutoTree();
 }

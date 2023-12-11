@@ -262,11 +262,10 @@ void RedBlackTree::InsertBalance(Node* node)
 			{
 				if (node == node->Parent->Right)
 				{
-					node = RightToParent(node);
-					node->Left = _Nil;
-					node->Right = _Nil;
+					LeftDirectionRotate(node);
+					node = node->Left;
 				}
-
+					
 				RightDirectionRotate(node->Parent);
 				// 색깔 설정
 				node->Parent->Color = NODE_COLOR::BLACK;
@@ -286,9 +285,8 @@ void RedBlackTree::InsertBalance(Node* node)
 			{
 				if (node == node->Parent->Left)
 				{
-					node = LeftToParent(node);
-					node->Left = _Nil;
-					node->Right = _Nil;
+					RightDirectionRotate(node);
+					node = node->Right;
 				}
 
 				LeftDirectionRotate(node->Parent);
@@ -357,14 +355,19 @@ void RedBlackTree::DeleteBalance(Node* node)
 					node = node->Parent;
 				}
 				// 왼쪽 자식 레드, 오른 자식 블랙
-				else if(node->Parent->Right->Right->Color == NODE_COLOR::BLACK)
+				else if(Sibling->Right->Color == NODE_COLOR::BLACK)
 				{
 					Sibling->Left->Color = NODE_COLOR::BLACK;
 					Sibling->Color = NODE_COLOR::RED;
 
 					RightDirectionRotate(Sibling->Left);
 
-					Sibling->Color = NODE_COLOR::RED;
+					node->Parent->Right->Color = node->Parent->Color;
+					node->Parent->Color = NODE_COLOR::BLACK;
+					node->Parent->Right->Right->Color = NODE_COLOR::BLACK;
+
+					LeftDirectionRotate(node->Parent->Right);
+					return;
 				}
 				// 오른 자식 레드, 왼쪽 자식 블랙
 				else
@@ -373,38 +376,64 @@ void RedBlackTree::DeleteBalance(Node* node)
 					node->Parent->Color = NODE_COLOR::BLACK;
 					node->Parent->Right->Right->Color = NODE_COLOR::BLACK;
 
-					LeftDirectionRotate(node->Parent);
+					LeftDirectionRotate(node->Parent->Right);
+					return;
 				}
 			}
 		}
 		// 부모 기준 오른쪽
 		else
 		{
+			Sibling = node->Parent->Left;
 
+			if (Sibling->Color == NODE_COLOR::RED)
+			{
+				// 형제 블랙
+				Sibling->Color = NODE_COLOR::BLACK;
+				// 우회전 해야 됨.
+				RightDirectionRotate(node->Parent->Left);
+				node->Parent->Color = NODE_COLOR::RED;
+
+				// 재검사 ... 인데 왜 재검사인가?
+			}
+			// 형제 블랙
+			else
+			{
+				// 형제의 양쪽 자식이 블랙
+				if (Sibling->Left->Color == NODE_COLOR::BLACK
+					&& Sibling->Right->Color == NODE_COLOR::BLACK)
+				{
+					Sibling->Color = NODE_COLOR::RED;
+					node = node->Parent;
+				}
+				// 왼쪽 자식 레드, 오른 자식 블랙
+				else if (Sibling->Right->Color == NODE_COLOR::BLACK)
+				{
+					Sibling->Left->Color = NODE_COLOR::BLACK;
+					Sibling->Color = NODE_COLOR::RED;
+
+					LeftDirectionRotate(Sibling->Left);
+
+					node->Parent->Left->Color = node->Parent->Color;
+					node->Parent->Color = NODE_COLOR::BLACK;
+					node->Parent->Left->Right->Color = NODE_COLOR::BLACK;
+
+					RightDirectionRotate(node->Parent->Left);
+					return;
+				}
+				// 오른 자식 레드, 왼쪽 자식 블랙
+				else
+				{
+					node->Parent->Left->Color = node->Parent->Color;
+					node->Parent->Color = NODE_COLOR::BLACK;
+					node->Parent->Left->Right->Color = NODE_COLOR::BLACK;
+
+					RightDirectionRotate(node->Parent->Left);
+					return;
+				}
+			}
 		}
 	}
-}
-
-Node* RedBlackTree::RightToParent(Node* node)
-{
-	node->Parent = node->Parent->Parent;
-	// 우선 부모를 내 왼쪽으로 가리킨다.
-	node->Left = node->Parent->Left;
-	node->Left->Parent = node;
-	node->Parent->Left = node;
-	
-	return node->Left;
-}
-
-Node* RedBlackTree::LeftToParent(Node* node)
-{
-	node->Parent = node->Parent->Parent;
-	// 우선 부모를 내 오른쪽으로 가리킨다.
-	node->Right = node->Parent->Right;
-	node->Right->Parent = node;
-	node->Parent->Right = node;
-
-	return node->Right;
 }
 
 void RedBlackTree::LineToParent(Node* node)
