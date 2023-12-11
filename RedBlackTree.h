@@ -80,8 +80,8 @@ private:
 
 	void RightDirectionRotate(Node* node);
 	void LeftDirectionRotate(Node* node);
-	void BalanceProc(Node* node);
 
+	// 출력을 위한 것
 	int GetMaxDepth() const;
 	RowList GetRowList(int maxDepth) const;
 	vector<string> FormatRow(const RowList& rowList) const;
