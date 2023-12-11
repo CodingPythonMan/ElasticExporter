@@ -8,7 +8,7 @@ BinaryTree::BinaryTree()
 
 BinaryTree::~BinaryTree()
 {
-	delete _Root;
+	DeleteDestructor(_Root);
 }
 
 bool BinaryTree::Insert(int Data)
@@ -78,7 +78,7 @@ void BinaryTree::Print()
 
 	// 빈 트리임을 확인
 	if (maxDepth == 0) {
-		cout << " <empty tree>\n";
+		cout << "[Empty tree]\n";
 		return;
 	}
 
@@ -107,12 +107,35 @@ bool BinaryTree::Delete(Node* node, Node* Parent, int Data)
 		if (node->Left != nullptr && node->Right != nullptr)
 		{
 			// 왼쪽의 맨 오른쪽으로 접근하고, 해당 node 설정 후 삭제.
+			Node* thisNode = node;
+			Parent = node;
 			node = node->Left;
-			while (node == nullptr)
+			while (node->Right != nullptr)
 			{
 				Parent = node;
 				node = node->Right;
 			}
+			thisNode->Data = node->Data;
+			// 여기서 return 되지 않는 이유는 node 는 지워질 때 아래 사항 고려.
+		}
+
+		// Root 면 Parent 관련 설정할 필요가 없다.
+		if (node == _Root)
+		{
+			if (node->Left != nullptr)
+			{
+				_Root = node->Left;
+			}
+			else if (node->Right != nullptr)
+			{
+				_Root = node->Right;
+			}
+			else
+			{
+				_Root = nullptr;
+			}
+			delete node;
+			return true;
 		}
 
 		// 왼쪽 자식이 있는 경우
@@ -127,6 +150,7 @@ bool BinaryTree::Delete(Node* node, Node* Parent, int Data)
 				Parent->Right = node->Left;
 			}
 		}
+		// 오른 자식이 있는 경우
 		else if (node->Right != nullptr)
 		{
 			if (Parent->Left == node)
@@ -138,9 +162,9 @@ bool BinaryTree::Delete(Node* node, Node* Parent, int Data)
 				Parent->Right = node->Right;
 			}
 		}
+		// 자식이 없는 경우
 		else
 		{
-			// 자식이 없는 경우
 			if (Parent->Left == node)
 			{
 				Parent->Left = nullptr;
@@ -173,6 +197,17 @@ bool BinaryTree::Find(Node* node, int Data)
 	rightResult = Find(node->Right, Data);
 
 	return leftResult || rightResult;
+}
+
+void BinaryTree::DeleteDestructor(Node* node)
+{
+	if (node == nullptr)
+		return;
+
+	// 소멸자는 후위 연산
+	DeleteDestructor(node->Left);
+	DeleteDestructor(node->Right);
+	delete node;
 }
 
 int BinaryTree::GetMaxDepth() const

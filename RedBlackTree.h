@@ -65,8 +65,10 @@ public:
 	void Print();
 
 private:
-	bool Delete(Node* node, Node* Parent, int Data);
+	bool Delete(Node* node, int Data);
 	bool Find(Node* node, int Data);
+
+	void DeleteDestructor(Node* node);
 
 	// Red-Black Tree 를 위한 것
 	void InsertBalance(Node* node);

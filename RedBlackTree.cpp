@@ -8,20 +8,19 @@ RedBlackTree::RedBlackTree()
 	_Nil->Parent = nullptr;
 	_Nil->Left = nullptr;
 	_Nil->Right = nullptr;
-	_Root = nullptr;
+	_Root = _Nil;
 }
 
 RedBlackTree::~RedBlackTree()
 {
+	DeleteDestructor(_Root);
+	// Nil 은 따로 삭제해준다.
 	delete _Nil;
-
-	// 트리 내 노드 모두 동적 해제 해줄 필요 있음.
-	delete _Root;
 }
 
 bool RedBlackTree::Insert(int Data)
 {
-	if (_Root == nullptr)
+	if (_Root == _Nil)
 	{
 		_Root = new Node;
 		// 루트 노드가 블랙인 이유
@@ -87,7 +86,8 @@ bool RedBlackTree::Insert(int Data)
 
 bool RedBlackTree::Delete(int Data)
 {
-	return Delete(_Root, nullptr, Data);
+	// 순회 코드
+	return Delete(_Root, Data);
 }
 
 bool RedBlackTree::Find(int Data)
@@ -116,13 +116,13 @@ void RedBlackTree::Print()
 	}
 }
 
-bool RedBlackTree::Delete(Node* node, Node* Parent, int Data)
+bool RedBlackTree::Delete(Node* node, int Data)
 {
 	if (node == _Nil)
 		return false;
 
 	bool leftResult, rightResult;
-	leftResult = Delete(node->Left, node, Data);
+	leftResult = Delete(node->Left, Data);
 	// 데이터에 대한 값 처리할 때 하위 있는지 확인 필요
 	if (Data == node->Data)
 	{
@@ -130,60 +130,79 @@ bool RedBlackTree::Delete(Node* node, Node* Parent, int Data)
 		if (node->Left != _Nil && node->Right != _Nil)
 		{
 			// 왼쪽의 맨 오른쪽으로 접근하고, 해당 node 설정 후 삭제.
+			Node* thisNode = node;
 			node = node->Left;
-			while (node == _Nil)
+			while (node->Right != _Nil)
 			{
-				Parent = node;
 				node = node->Right;
 			}
+			thisNode->Data = node->Data;
+			// 여기서 return 되지 않는 이유는 node 는 지워질 때 아래 사항 고려.
+		}
+
+		// Root 면 Parent 관련 설정할 필요가 없다.
+		if (node == _Root)
+		{
+			if (node->Left != _Nil)
+			{
+				_Root = node->Left;
+			}
+			else if (node->Right != _Nil)
+			{
+				_Root = node->Right;
+			}
+			else
+			{
+				_Root = _Nil;
+			}
+			delete node;
+			return true;
 		}
 
 		// 왼쪽 자식이 있는 경우
 		if (node->Left != _Nil)
 		{
-			if (Parent->Left == node)
+			if (node->Parent->Left == node)
 			{
-				Parent->Left = node->Left;
+				node->Parent->Left = node->Left;
 			}
 			else
 			{
-				Parent->Right = node->Left;
+				node->Parent->Right = node->Left;
 			}
+			node->Left->Parent = node->Parent;
 		}
+		// 오른 자식이 있는 경우
 		else if (node->Right != _Nil)
 		{
-			if (Parent->Left == node)
+			if (node->Parent->Left == node)
 			{
-				Parent->Left = node->Right;
+				node->Parent->Left = node->Right;
 			}
 			else
 			{
-				Parent->Right = node->Right;
+				node->Parent->Right = node->Right;
 			}
+			node->Right->Parent = node->Parent;
 		}
+		// 자식이 없는 경우
 		else
 		{
-			// 자식이 없는 경우
-			if (Parent->Left == node)
+			if (node->Parent->Left == node)
 			{
-				Parent->Left = _Nil;
+				node->Parent->Left = _Nil;
 			}
 			else
 			{
-				Parent->Right = _Nil;
+				node->Parent->Right = _Nil;
 			}
 		}
+		delete node;
 		return true;
 	}
-	rightResult = Delete(node->Right, node, Data);
+	rightResult = Delete(node->Right, Data);
 
-	bool result = leftResult || rightResult;
-	if (true == result)
-	{
-		DeleteBalance(node);
-	}
-
-	return result;
+	return leftResult || rightResult;
 }
 
 bool RedBlackTree::Find(Node* node, int Data)
@@ -201,6 +220,10 @@ bool RedBlackTree::Find(Node* node, int Data)
 	rightResult = Find(node->Right, Data);
 
 	return leftResult || rightResult;
+}
+
+void RedBlackTree::DeleteDestructor(Node* node)
+{
 }
 
 void RedBlackTree::InsertBalance(Node* node)
@@ -263,6 +286,13 @@ void RedBlackTree::InsertBalance(Node* node)
 
 void RedBlackTree::DeleteBalance(Node* node)
 {
+	if (node == _Nil)
+		return;
+
+	// 소멸자는 후위 연산
+	DeleteDestructor(node->Left);
+	DeleteDestructor(node->Right);
+	delete node;
 }
 
 Node* RedBlackTree::RightToParent(Node* node)
@@ -440,7 +470,7 @@ int RedBlackTree::GetMaxDepth() const
 {
 	int maxLevel = 0;
 
-	if (_Root == nullptr)
+	if (_Root == _Nil)
 		return maxLevel;
 
 	maxLevel = _Root->GetMaxDepth();
