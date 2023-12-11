@@ -101,7 +101,7 @@ void RedBlackTree::Print()
 
 	// 빈 트리임을 확인
 	if (maxDepth == 0) {
-		cout << " <empty tree>\n";
+		cout << "[Empty Tree]\n";
 		return;
 	}
 
@@ -155,10 +155,13 @@ bool RedBlackTree::Delete(Node* node, int Data)
 			{
 				_Root = _Nil;
 			}
+			// Nil 은 Black 이 되어도 된다.
+			_Root->Color = NODE_COLOR::BLACK;
 			delete node;
 			return true;
 		}
 
+		DeleteBalance(node);
 		// 왼쪽 자식이 있는 경우
 		if (node->Left != _Nil)
 		{
@@ -224,6 +227,13 @@ bool RedBlackTree::Find(Node* node, int Data)
 
 void RedBlackTree::DeleteDestructor(Node* node)
 {
+	if (node == _Nil)
+		return;
+
+	// 소멸자는 후위 연산
+	DeleteDestructor(node->Left);
+	DeleteDestructor(node->Right);
+	delete node;
 }
 
 void RedBlackTree::InsertBalance(Node* node)
@@ -244,6 +254,10 @@ void RedBlackTree::InsertBalance(Node* node)
 			}
 
 			RightDirectionRotate(node);
+			// 색깔 설정
+			node->Parent->Color = NODE_COLOR::BLACK;
+			node->Parent->Right->Color = NODE_COLOR::RED;
+
 			node = node->Parent;
 			return;
 		}
@@ -269,6 +283,10 @@ void RedBlackTree::InsertBalance(Node* node)
 			}
 
 			LeftDirectionRotate(node);
+			// 색깔 설정
+			node->Parent->Color = NODE_COLOR::BLACK;
+			node->Parent->Left->Color = NODE_COLOR::RED;
+
 			node = node->Parent;
 			return;
 		}
@@ -286,13 +304,40 @@ void RedBlackTree::InsertBalance(Node* node)
 
 void RedBlackTree::DeleteBalance(Node* node)
 {
-	if (node == _Nil)
+	if (node->Color == NODE_COLOR::RED)
 		return;
 
-	// 소멸자는 후위 연산
-	DeleteDestructor(node->Left);
-	DeleteDestructor(node->Right);
-	delete node;
+	// 자식이 없는 경우 그냥 통과
+	if (node->Left != _Nil && node->Left->Color == NODE_COLOR::RED)
+	{
+		node->Left->Color = NODE_COLOR::BLACK;
+		return;
+	}
+	else if (node->Right != _Nil && node->Right->Color == NODE_COLOR::RED)
+	{
+		node->Right->Color = NODE_COLOR::BLACK;
+		return;
+	}
+
+	// 부모 기준 왼쪽
+	if (node->Parent->Left == node)
+	{
+		if (node->Parent->Right->Color == NODE_COLOR::RED)
+		{
+			// 형제 블랙
+			node->Parent->Right->Color = NODE_COLOR::BLACK;
+			// 좌회전 해야 됨.
+			LeftDirectionRotate(node->Parent->Right);
+			node->Parent->Color = NODE_COLOR::RED;
+
+			// 재검사
+		}
+	}
+	// 부모 기준 오른쪽
+	else
+	{
+
+	}
 }
 
 Node* RedBlackTree::RightToParent(Node* node)
@@ -350,10 +395,6 @@ void RedBlackTree::RightDirectionRotate(Node* node)
 
 	// G부모의 부모 -> 부모
 	node->Parent->Right->Parent = node->Parent;
-
-	// 색깔 설정
-	node->Parent->Color = NODE_COLOR::BLACK;
-	node->Parent->Right->Color = NODE_COLOR::RED;
 }
 
 void RedBlackTree::LeftDirectionRotate(Node* node)
@@ -389,10 +430,6 @@ void RedBlackTree::LeftDirectionRotate(Node* node)
 
 	// G부모의 부모(이미 G부모는 부모의 L로 이동) -> 부모
 	node->Parent->Left->Parent = node->Parent;
-
-	// 색깔 설정
-	node->Parent->Color = NODE_COLOR::BLACK;
-	node->Parent->Left->Color = NODE_COLOR::RED;
 }
 
 void RedBlackTree::BalanceProc(Node* node)
@@ -427,6 +464,10 @@ void RedBlackTree::BalanceProc(Node* node)
 				}
 
 				RightDirectionRotate(node);
+				// 색깔 설정
+				node->Parent->Color = NODE_COLOR::BLACK;
+				node->Parent->Right->Color = NODE_COLOR::RED;
+
 				node = node->Parent;
 				return;
 			}
@@ -451,6 +492,10 @@ void RedBlackTree::BalanceProc(Node* node)
 				}
 
 				LeftDirectionRotate(node);
+				// 색깔 설정
+				node->Parent->Color = NODE_COLOR::BLACK;
+				node->Parent->Left->Color = NODE_COLOR::RED;
+
 				node = node->Parent;
 				return;
 			}
