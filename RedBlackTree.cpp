@@ -366,20 +366,13 @@ void RedBlackTree::DeleteBalance(Node* node)
 
 					RightDirectionRotate(Sibling->Left);
 				}
-				// 오른 자식 레드, 왼쪽 자식 블랙
-				else if(Sibling->Left->Color == NODE_COLOR::BLACK)
+				// 오른쪽 자식 레드, 양쪽 레드
+				else
 				{
 					Sibling->Color = Parent->Color;
 					Parent->Color = NODE_COLOR::BLACK;
 					Sibling->Right->Color = NODE_COLOR::BLACK;
 
-					LeftDirectionRotate(Sibling);
-					return;
-				}
-				// 양쪽 레드
-				else
-				{
-					Sibling->Right->Color = NODE_COLOR::BLACK;
 					LeftDirectionRotate(Sibling);
 					return;
 				}
@@ -419,20 +412,13 @@ void RedBlackTree::DeleteBalance(Node* node)
 
 					LeftDirectionRotate(Sibling->Right);
 				}
-				// 오른 자식 블랙, 왼쪽 자식 레드
-				else if(Sibling->Right->Color == NODE_COLOR::BLACK)
+				// 왼쪽 자식 레드, 양쪽 레드
+				else
 				{
 					Sibling->Color = Parent->Color;
 					Parent->Color = NODE_COLOR::BLACK;
 					Sibling->Left->Color = NODE_COLOR::BLACK;
 
-					RightDirectionRotate(Sibling);
-					return;
-				}
-				// 양쪽 레드
-				else
-				{
-					Sibling->Left->Color = NODE_COLOR::BLACK;
 					RightDirectionRotate(Sibling);
 					return;
 				}

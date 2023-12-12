@@ -50,19 +50,7 @@ void TestAutoTree2()
 
 void TestAutoTree()
 {
-	RedBlackTree tree;
-	srand(3);
-
-	Test test;
-
-	for (int i = 0; i < 10; i++)
-	{
-		int random = rand() % 100;
-		test.PutReliableData(random);
-		tree.Insert(random);
-		tree.Print();
-		test.Print();
-	}
+	test.CaculateInsertTime();
 }
 
 void TestManualTree()
@@ -126,5 +114,6 @@ void TestManualTree()
 int main()
 {
 	//TestManualTree();
-	TestAutoTree2();
+	//TestAutoTree2();
+	TestAutoTree();
 }
