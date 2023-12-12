@@ -3,6 +3,43 @@
 #include <iostream>
 using namespace std;
 
+RedBlackTree tree;
+Test test;
+
+void Insert(int num)
+{
+	test.PutReliableData(num);
+	tree.Insert(num);
+}
+
+void TestAutoTree2()
+{
+	Insert(100);
+
+	Insert(50);
+	Insert(150);
+
+	Insert(30);
+	Insert(70);
+	Insert(20);
+	Insert(40);
+
+	Insert(60);
+	Insert(80);
+	Insert(10);
+	Insert(25); 
+	Insert(35);
+	Insert(45);
+	Insert(28);
+
+	tree.Delete(150);
+	tree.Delete(60);
+	tree.Delete(70);
+
+	tree.Print();
+	test.Print();
+}
+
 void TestAutoTree()
 {
 	RedBlackTree tree;
@@ -80,6 +117,7 @@ void TestManualTree()
 
 int main()
 {
-	TestManualTree();
+	//TestManualTree();
 	//TestAutoTree();
+	TestAutoTree2();
 }
