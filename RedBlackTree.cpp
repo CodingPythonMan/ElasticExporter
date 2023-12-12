@@ -325,8 +325,11 @@ void RedBlackTree::DeleteBalance(Node* node)
 	{
 		// 2.1 조건
 		if (node->Color == NODE_COLOR::RED)
+		{
+			node->Color = NODE_COLOR::BLACK;
 			return;
-	
+		}
+			
 		// 부모 기준 왼쪽
 		Node* Sibling;
 		if (Parent->Left == node)
@@ -421,7 +424,7 @@ void RedBlackTree::DeleteBalance(Node* node)
 				{
 					Sibling->Color = Parent->Color;
 					Parent->Color = NODE_COLOR::BLACK;
-					Sibling->Right->Color = NODE_COLOR::BLACK;
+					Sibling->Left->Color = NODE_COLOR::BLACK;
 
 					RightDirectionRotate(Sibling);
 					return;
