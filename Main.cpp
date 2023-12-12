@@ -35,8 +35,14 @@ void TestAutoTree2()
 	tree.Delete(150);
 	tree.Delete(60);
 	tree.Delete(70);
-	tree.Delete(80);
-	tree.Delete(100);
+	tree.Delete(35);
+	tree.Delete(45);
+	tree.Delete(40);
+
+	Insert(120);
+	Insert(130);
+
+	tree.Delete(50);
 
 	tree.Print();
 	test.Print();
@@ -119,5 +125,6 @@ void TestManualTree()
 
 int main()
 {
-	TestManualTree();
+	//TestManualTree();
+	TestAutoTree2();
 }

@@ -345,7 +345,7 @@ void RedBlackTree::DeleteBalance(Node* node)
 				LeftDirectionRotate(Sibling);
 				Parent->Color = NODE_COLOR::RED;
 
-				// 재검사 ... 인데 왜 재검사인가?
+				node = Parent->Left;
 			}
 			// 형제 블랙
 			else
@@ -397,8 +397,8 @@ void RedBlackTree::DeleteBalance(Node* node)
 				// 우회전 해야 됨.
 				RightDirectionRotate(Sibling);
 				Parent->Color = NODE_COLOR::RED;
-			
-				// 재검사 해야한다는데 어떻게 하는걸까...
+				
+				node = Parent->Right;
 			}
 			// 형제 블랙
 			else
@@ -417,7 +417,7 @@ void RedBlackTree::DeleteBalance(Node* node)
 					Sibling->Right->Color = NODE_COLOR::BLACK;
 					Sibling->Color = NODE_COLOR::RED;
 
-					LeftDirectionRotate(Sibling->Left);
+					LeftDirectionRotate(Sibling->Right);
 				}
 				// 오른 자식 블랙, 왼쪽 자식 레드
 				else if(Sibling->Right->Color == NODE_COLOR::BLACK)
