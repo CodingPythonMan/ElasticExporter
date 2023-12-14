@@ -90,6 +90,11 @@ void Test::CalculateInsertTime()
 	cout << "Red Black Tree Insert : " << cal << "\n";
 }
 
+void Test::TestBinaryTree()
+{
+
+}
+
 void Test::TestRedBlackTree()
 {
 	_ReliableList.clear();
@@ -123,6 +128,7 @@ int Test::MakeIntRand(int maxNum)
 	num <<= 15;
 	num += rand();
 
+	// 보니까 %가 들어간 시점에서 난수 측정하기에 멀었다.
 	num %= maxNum;
 
 	return (int)num;

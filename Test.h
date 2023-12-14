@@ -1,3 +1,5 @@
+#pragma once
+
 #include "RedBlackTree.h"
 #include "BinaryTree.h"
 #include <queue>
@@ -18,8 +20,9 @@ public:
 
 	void CalculateInsertTime();
 
-
+	void TestBinaryTree();
 	void TestRedBlackTree();
+
 private:
 	int MakeIntRand(int maxNum);
 	void Shuffle(int& num1, int& num2);
