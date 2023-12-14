@@ -9,6 +9,10 @@ RedBlackTree::RedBlackTree()
 	_Nil->Left = nullptr;
 	_Nil->Right = nullptr;
 	_Root = _Nil;
+
+#ifdef _DEBUG
+	Index = 0;
+#endif
 }
 
 RedBlackTree::~RedBlackTree()
@@ -675,4 +679,29 @@ void RedBlackTree::TrimRow(vector<string>& rows)
 	{
 		row.erase(0, min_space);
 	}
+}
+
+void RedBlackTree::Test(const vector<int>& ReliableList)
+{
+	_ReliableList = ReliableList;
+	Test(_Root);
+}
+
+void RedBlackTree::Test(Node* node)
+{
+	if (node == _Nil)
+		return;
+
+	Test(node->Left);
+	if (node->Data != _ReliableList[Index])
+	{
+		cout << "Index : " << Index << ", Error!!!\n";
+		cout << "Data : " << node->Data << ", Error!!!\n";
+	}
+	else
+	{
+		cout << "Reliable Data : " << node->Data << "\n";
+		Index++;
+	}
+	Test(node->Right);
 }

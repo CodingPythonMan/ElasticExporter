@@ -50,7 +50,8 @@ void TestAutoTree2()
 
 void TestAutoTree()
 {
-	test.CaculateInsertTime();
+	//test.CalculateInsertTime();
+	test.TestRedBlackTree();
 }
 
 void TestManualTree()

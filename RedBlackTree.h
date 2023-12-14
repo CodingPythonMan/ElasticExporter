@@ -87,4 +87,12 @@ private:
 private:
 	Node* _Nil;
 	Node* _Root;
+
+#ifdef _DEBUG
+public:
+	void Test(const vector<int>& ReliableList);
+	void Test(Node* node);
+	vector<int> _ReliableList;
+	int Index;
+#endif
 };

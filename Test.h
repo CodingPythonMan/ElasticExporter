@@ -16,13 +16,16 @@ public:
 	
 	void Print();
 
-	void CaculateInsertTime();
+	void CalculateInsertTime();
+
+
+	void TestRedBlackTree();
+private:
+	int MakeIntRand(int maxNum);
+	void Shuffle(int& num1, int& num2);
 
 private:
-	
-
-private:
-	vector<int> ReliableList;
+	vector<int> _ReliableList;
 	BinaryTree _BinaryTree;
 	RedBlackTree _RedBlackTree;
 
