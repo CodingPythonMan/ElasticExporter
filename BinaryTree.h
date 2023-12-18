@@ -64,4 +64,12 @@ private:
 	void TrimRow(vector<string>& rows);
 
 	Node* _Root;
+
+#ifdef _DEBUG
+public:
+	void ReliableTest(const vector<int>& ReliableList);
+	bool Test(Node* node);
+	vector<int> _ReliableList;
+	int Index;
+#endif
 };

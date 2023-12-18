@@ -8,26 +8,25 @@
 
 #define INC_COUNT 1000
 #define RANDOM_COUNT 1000000
+#define TEST_COUNT 20
 
 class Test {
 public:
 	Test();
 	virtual ~Test();
 
-	bool PutReliableData(int Data);
-	
-	void Print();
-
 	void CalculateInsertTime();
 
+	void MakeTestCase();
 	void TestBinaryTree();
 	void TestRedBlackTree();
 
 private:
 	void Shuffle(int& num1, int& num2);
+	int MakeIntRand(int maxNum);
 
 private:
-	vector<int> _ReliableList;
+	vector<int> _TestCase;
 	BinaryTree _BinaryTree;
 	RedBlackTree _RedBlackTree;
 

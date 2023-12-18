@@ -6,52 +6,17 @@ using namespace std;
 RedBlackTree tree;
 Test test;
 
-void Insert(int num)
-{
-	test.PutReliableData(num);
-	tree.Insert(num);
-}
-
-void TestAutoTree2()
-{
-	Insert(100);
-
-	Insert(50);
-	Insert(150);
-
-	Insert(30);
-	Insert(70);
-	Insert(20);
-	Insert(40);
-
-	Insert(60);
-	Insert(80);
-	Insert(10);
-	Insert(25); 
-	Insert(35);
-	Insert(45);
-	Insert(28);
-
-	tree.Delete(150);
-	tree.Delete(60);
-	tree.Delete(70);
-	tree.Delete(35);
-	tree.Delete(45);
-	tree.Delete(40);
-
-	Insert(120);
-	Insert(130);
-
-	tree.Delete(50);
-
-	tree.Print();
-	test.Print();
-}
-
 void TestAutoTree()
 {
-	//test.CalculateInsertTime();
+	test.CalculateInsertTime();
+}
+
+// 의사 난수 만들어 테스트
+void TestRandomNumberTree()
+{
+	test.MakeTestCase();
 	test.TestRedBlackTree();
+	test.TestBinaryTree();
 }
 
 void TestManualTree()
@@ -73,10 +38,8 @@ void TestManualTree()
 		case 1:
 			cout << ">> ";
 			cin >> Data;
-			test.PutReliableData(Data);
 			tree.Insert(Data);
 			tree.Print();
-			test.Print();
 			break;
 		case 2:
 			cout << ">> ";
@@ -108,13 +71,17 @@ void TestManualTree()
 			cout << "잘못된 메뉴입니다. \n";
 			break;
 		}
-		
 	}
 }
 
 int main()
 {
+	// Test 때 확인할 것.
 	//TestManualTree();
-	//TestAutoTree2();
-	TestAutoTree();
+
+	// 의사 난수 삽입,삭제 테스트
+	TestRandomNumberTree();
+
+	// 삽입, 삭제 속도 테스트
+
 }

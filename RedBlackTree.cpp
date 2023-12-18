@@ -681,7 +681,7 @@ void RedBlackTree::TrimRow(vector<string>& rows)
 	}
 }
 
-void RedBlackTree::Test(const vector<int>& ReliableList)
+void RedBlackTree::ReliableTest(const vector<int>& ReliableList)
 {
 	_ReliableList = ReliableList;
 	cout << "[Red - Black Tree Test]\n";
@@ -692,7 +692,7 @@ void RedBlackTree::Test(const vector<int>& ReliableList)
 	}
 	else
 	{
-		cout << "[Test Result] : 올바름.\n";
+		cout << "[Test Result] : Reliable Test 이상 없음.\n";
 	}
 }
 
