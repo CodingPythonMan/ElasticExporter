@@ -24,7 +24,6 @@ public:
 	void TestRedBlackTree();
 
 private:
-	int MakeIntRand(int maxNum);
 	void Shuffle(int& num1, int& num2);
 
 private:

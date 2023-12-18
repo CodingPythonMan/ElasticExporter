@@ -684,24 +684,36 @@ void RedBlackTree::TrimRow(vector<string>& rows)
 void RedBlackTree::Test(const vector<int>& ReliableList)
 {
 	_ReliableList = ReliableList;
-	Test(_Root);
-}
-
-void RedBlackTree::Test(Node* node)
-{
-	if (node == _Nil)
-		return;
-
-	Test(node->Left);
-	if (node->Data != _ReliableList[Index])
+	cout << "[Red - Black Tree Test]\n";
+	cout << "[Element Count] : " << ReliableList.size() << "\n";
+	if (Test(_Root) == true)
 	{
-		cout << "Index : " << Index << ", Error!!!\n";
-		cout << "Data : " << node->Data << ", Error!!!\n";
+		cout << "[Test Result] : Error.\n";
 	}
 	else
 	{
-		cout << "Reliable Data : " << node->Data << "\n";
+		cout << "[Test Result] : ¿Ã¹Ù¸§.\n";
+	}
+}
+
+bool RedBlackTree::Test(Node* node)
+{
+	if (node == _Nil)
+		return false;
+
+	bool leftResult = Test(node->Left);
+	if (node->Data == _ReliableList[Index])
+	{
 		Index++;
 	}
-	Test(node->Right);
+	else
+	{
+		cout << "Index : " << Index << ", Error!!!\n";
+		cout << "Data : " << node->Data << ", Error!!!\n";
+		__debugbreak();
+		return true;
+	}
+	bool rightResult = Test(node->Right);
+
+	return leftResult || rightResult;
 }

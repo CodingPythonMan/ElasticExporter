@@ -2,6 +2,7 @@
 #include "RedBlackTree.h"
 #include <iostream>
 #include <algorithm>
+#include <random>
 
 Test::Test()
 {
@@ -105,13 +106,13 @@ void Test::TestRedBlackTree()
 		_ReliableList.push_back(i);
 	}
 
-	int a = MakeIntRand(RANDOM_COUNT);
-	int b = MakeIntRand(RANDOM_COUNT);
+	random_device rd;
+	// Seed Value
+	mt19937 gen(rd());
+	uniform_int_distribution<int> random(0, RANDOM_COUNT-1);
 
 	for (int i = 0; i < RANDOM_COUNT; i++)
-		Shuffle(_ReliableList[a], _ReliableList[b]);
-
-	Shuffle(_ReliableList[0], _ReliableList[1]);
+		Shuffle(_ReliableList[i], _ReliableList[random(gen)]);
 
 	// 2. 해당 값을 트리에 삽입하고, 트리로 해당 Vector를 넘겨 검증한다.
 	for (int i = 0; i < _ReliableList.size(); i++)
@@ -120,18 +121,6 @@ void Test::TestRedBlackTree()
 	sort(_ReliableList.begin(), _ReliableList.end());
 
 	_RedBlackTree.Test(_ReliableList);
-}
-
-int Test::MakeIntRand(int maxNum)
-{
-	unsigned int num = rand();
-	num <<= 15;
-	num += rand();
-
-	// 보니까 %가 들어간 시점에서 난수 측정하기에 멀었다.
-	num %= maxNum;
-
-	return (int)num;
 }
 
 void Test::Shuffle(int& num1, int& num2)
