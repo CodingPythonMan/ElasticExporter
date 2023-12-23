@@ -1,5 +1,6 @@
 #pragma once
 #include "Cell.h"
+#include <list>
 
 class BinaryTree {
 	struct Node {
@@ -67,9 +68,10 @@ private:
 
 #ifdef _DEBUG
 public:
-	void ReliableTest(const vector<int>& ReliableList);
+	void ReliableTest(const list<int>& ReliableList);
 	bool Test(Node* node);
-	vector<int> _ReliableList;
-	int Index;
+	list<int> _ReliableList;
+	list<int>::iterator _Iter;
+	int _Index;
 #endif
 };

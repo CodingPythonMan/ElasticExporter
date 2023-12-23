@@ -5,7 +5,7 @@ BinaryTree::BinaryTree()
 {
 	_Root = nullptr;
 #ifdef DEBUG
-	Index = 0;
+	_Index = 0;
 #endif // DEBUG
 }
 
@@ -424,9 +424,11 @@ void BinaryTree::TrimRow(vector<string>& rows)
 	}
 }
 
-void BinaryTree::ReliableTest(const vector<int>& ReliableList)
+void BinaryTree::ReliableTest(const list<int>& ReliableList)
 {
 	_ReliableList = ReliableList;
+	_Iter = _ReliableList.begin();
+	_Index = 0;
 	cout << "[Binary Tree Test]\n";
 	cout << "[Element Count] : " << ReliableList.size() << "\n";
 	if (Test(_Root) == true)
@@ -445,13 +447,14 @@ bool BinaryTree::Test(Node* node)
 		return false;
 
 	bool leftResult = Test(node->Left);
-	if (node->Data == _ReliableList[Index])
+	if (node->Data == *_Iter)
 	{
-		Index++;
+		++_Iter;
+		_Index++;
 	}
 	else
 	{
-		cout << "Index : " << Index << ", Error!!!\n";
+		cout << "Index : " << _Index << ", Error!!!\n";
 		cout << "Data : " << node->Data << ", Error!!!\n";
 		__debugbreak();
 		return true;

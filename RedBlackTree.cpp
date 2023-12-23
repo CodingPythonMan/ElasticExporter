@@ -11,7 +11,7 @@ RedBlackTree::RedBlackTree()
 	_Root = _Nil;
 
 #ifdef _DEBUG
-	Index = 0;
+	_Index = 0;
 #endif
 }
 
@@ -681,9 +681,11 @@ void RedBlackTree::TrimRow(vector<string>& rows)
 	}
 }
 
-void RedBlackTree::ReliableTest(const vector<int>& ReliableList)
+void RedBlackTree::ReliableTest(const list<int>& ReliableList)
 {
 	_ReliableList = ReliableList;
+	_Iter = _ReliableList.begin();
+	_Index = 0;
 	cout << "[Red - Black Tree Test]\n";
 	cout << "[Element Count] : " << ReliableList.size() << "\n";
 	if (Test(_Root) == true)
@@ -702,13 +704,14 @@ bool RedBlackTree::Test(Node* node)
 		return false;
 
 	bool leftResult = Test(node->Left);
-	if (node->Data == _ReliableList[Index])
+	if (node->Data == *_Iter)
 	{
-		Index++;
+		++_Iter;
+		_Index++;
 	}
 	else
 	{
-		cout << "Index : " << Index << ", Error!!!\n";
+		cout << "Index : " << _Index << ", Error!!!\n";
 		cout << "Data : " << node->Data << ", Error!!!\n";
 		__debugbreak();
 		return true;

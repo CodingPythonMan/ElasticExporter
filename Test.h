@@ -1,8 +1,6 @@
 #pragma once
-
 #include "RedBlackTree.h"
 #include "BinaryTree.h"
-#include <queue>
 #include <Windows.h>
 #include <profileapi.h>
 

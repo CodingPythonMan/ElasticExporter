@@ -1,7 +1,6 @@
 #include "Test.h"
 #include "RedBlackTree.h"
 #include <iostream>
-#include <algorithm>
 
 Test::Test()
 {
@@ -47,20 +46,16 @@ void Test::CalculateInsertTime()
 	cout << "[비순차적(랜덤)] " << RANDOM_COUNT <<  " \n";
 	// 비순차적인 데이터
 	QueryPerformanceCounter(&Start);
-	for (int i = 0; i < RANDOM_COUNT; i++)
-	{
-		RandomBinaryTree.Insert(_TestCase[i]);
-	}
+	for (auto iter = _TestCase.begin(); iter != _TestCase.end(); ++iter)
+		RandomBinaryTree.Insert(*iter);
 	QueryPerformanceCounter(&End);
 
 	cal = (End.QuadPart - Start.QuadPart) / (double)_Freq.QuadPart;
 	cout << "Binary Tree Insert : " << cal << "\n";
 
 	QueryPerformanceCounter(&Start);
-	for (int i = 0; i < RANDOM_COUNT; i++)
-	{
-		RandomRedBlackTree.Insert(_TestCase[i]);
-	}
+	for (auto iter = _TestCase.begin(); iter != _TestCase.end(); ++iter)
+		RandomRedBlackTree.Insert(*iter);
 	QueryPerformanceCounter(&End);
 
 	cal = (End.QuadPart - Start.QuadPart) / (double)_Freq.QuadPart;
@@ -69,51 +64,49 @@ void Test::CalculateInsertTime()
 
 void Test::TestBinaryTree()
 {
-	vector<int> _ReliableList{ _TestCase };
+	list<int> _ReliableList;
+	for (int i = 0; i < _TestCase.size(); i++)
+		_ReliableList.push_back(_TestCase[i]);
 
 	// 해당 값을 트리에 삽입하고, 트리로 해당 Vector를 넘겨 검증한다.
-	for (int i = 0; i < _ReliableList.size(); i++)
-		_BinaryTree.Insert(_ReliableList[i]);
+	for (auto iter = _ReliableList.begin(); iter != _ReliableList.end(); ++iter)
+		_BinaryTree.Insert(*iter);
 
-	sort(_ReliableList.begin(), _ReliableList.end());
+	_ReliableList.sort();
 
 	// 삽입 신뢰성 테스트
 	_BinaryTree.ReliableTest(_ReliableList);
 
+	vector<int> deleteItems;
+	int randomNum;
 	// 삽입, 삭제 신뢰성 테스트
-	/*
 	for (int i = 0; i < TEST_COUNT; i++)
 	{
-		int DeleteCount = _TestCase[i];
-
-		for (int i = 0; i < DeleteCount; i++)
+		// 삭제 후 조회
+		for (int j = 0; j < rand(); j++)
 		{
-			int DeleteNum = _ReliableList[_ReliableList.size() - 1];
-
-			if (DeleteNum % 2 == 0)
-			{
-				_ReliableList.pop_back();
-				_BinaryTree.Delete(i);
-			}
-			else
-			{
-				DeleteNum = _ReliableList[0];
-
-			}
+			randomNum = MakeIntRand(RANDOM_COUNT);
+			_BinaryTree.Delete(randomNum);
+			_ReliableList.remove(randomNum);
+			deleteItems.push_back(randomNum);
 		}
 
-	}*/
+		// 삽입 후 조회
+
+	}
 }
 
 void Test::TestRedBlackTree()
 {
-	vector<int> _ReliableList{ _TestCase };
+	list<int> _ReliableList;
+	for (int i = 0; i < _TestCase.size(); i++)
+		_ReliableList.push_back(_TestCase[i]);
 
 	// 해당 값을 트리에 삽입하고, 트리로 해당 Vector를 넘겨 검증한다.
-	for (int i = 0; i < _ReliableList.size(); i++)
-		_RedBlackTree.Insert(_ReliableList[i]);
+	for (auto iter = _ReliableList.begin(); iter != _ReliableList.end(); ++iter)
+		_RedBlackTree.Insert(*iter);
 
-	sort(_ReliableList.begin(), _ReliableList.end());
+	_ReliableList.sort();
 
 	// 삽입 신뢰성 테스트
 	_RedBlackTree.ReliableTest(_ReliableList);
