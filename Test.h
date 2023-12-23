@@ -5,7 +5,7 @@
 #include <profileapi.h>
 
 #define INC_COUNT 1000
-#define RANDOM_COUNT 1000000
+#define RANDOM_COUNT 10000
 #define TEST_COUNT 20
 
 class Test {

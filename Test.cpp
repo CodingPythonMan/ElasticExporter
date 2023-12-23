@@ -79,20 +79,21 @@ void Test::TestBinaryTree()
 
 	vector<int> deleteItems;
 	int randomNum;
-	// 삽입, 삭제 신뢰성 테스트
+	// 삭제 신뢰성 테스트
 	for (int i = 0; i < TEST_COUNT; i++)
 	{
-		// 삭제 후 조회
-		for (int j = 0; j < rand(); j++)
+		int deleteCount = rand();
+		// 삭제
+		for (int j = 0; j < deleteCount; j++)
 		{
 			randomNum = MakeIntRand(RANDOM_COUNT);
 			_BinaryTree.Delete(randomNum);
 			_ReliableList.remove(randomNum);
 			deleteItems.push_back(randomNum);
 		}
-
-		// 삽입 후 조회
-
+		cout << deleteCount << "개 삭제\n";
+		// 조회
+		_BinaryTree.ReliableTest(_ReliableList);
 	}
 }
 
@@ -112,7 +113,24 @@ void Test::TestRedBlackTree()
 	_RedBlackTree.ReliableTest(_ReliableList);
 
 	// 삭제 신뢰성 테스트
-	int DeleteCount = MakeIntRand(RANDOM_COUNT);
+	vector<int> deleteItems;
+	int randomNum;
+	// 삭제 신뢰성 테스트
+	for (int i = 0; i < TEST_COUNT; i++)
+	{
+		int deleteCount = rand();
+		// 삭제
+		for (int j = 0; j < deleteCount; j++)
+		{
+			randomNum = MakeIntRand(RANDOM_COUNT);
+			_RedBlackTree.Delete(randomNum);
+			_ReliableList.remove(randomNum);
+			deleteItems.push_back(randomNum);
+		}
+		cout << deleteCount << "개 삭제\n";
+		// 조회
+		_BinaryTree.ReliableTest(_ReliableList);
+	}
 }
 
 int Test::MakeIntRand(int maxNum)
