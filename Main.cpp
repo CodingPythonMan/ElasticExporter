@@ -82,6 +82,29 @@ int main()
 	// 의사 난수 삽입,삭제 테스트
 	TestRandomNumberTree();
 
+	/*
+	RedBlackTree redblackTree;
+	for(int i=0 ; i< 10; i++)
+		redblackTree.Insert(i);
+
+
+	for (int i = 0; i < 5; i++)
+		redblackTree.Delete(i);
+
+	redblackTree.Insert(10);
+	redblackTree.Insert(3);
+	redblackTree.Insert(11);
+	redblackTree.Insert(0);
+	redblackTree.Insert(15);
+	redblackTree.Insert(4);
+	redblackTree.Insert(17);
+
+	for (int i = 6; i < 11; i++)
+	{
+		redblackTree.Delete(i);
+		redblackTree.Print();
+	}*/
+
 	// 삽입, 삭제 속도 테스트
 
 }

@@ -327,6 +327,10 @@ void RedBlackTree::DeleteBalance(Node* node)
 	Node* Parent = node->Parent;
 	while (1)
 	{
+		// 루트까지 올라왔다면 종료
+		if (node == _Root)
+			return;
+
 		// 2.1 조건
 		if (node->Color == NODE_COLOR::RED)
 		{
@@ -396,6 +400,7 @@ void RedBlackTree::DeleteBalance(Node* node)
 				Parent->Color = NODE_COLOR::RED;
 				
 				node = Parent->Right;
+				
 			}
 			// 형제 블랙
 			else

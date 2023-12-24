@@ -129,7 +129,7 @@ void Test::TestRedBlackTree()
 		}
 		cout << deleteCount << "개 삭제\n";
 		// 조회
-		_BinaryTree.ReliableTest(_ReliableList);
+		_RedBlackTree.ReliableTest(_ReliableList);
 	}
 }
 
