@@ -65,6 +65,8 @@ public:
 
 	void Print();
 
+	int GetMaxDepth() const;
+
 private:
 	bool Delete(Node* node, int Data);
 	bool Find(Node* node, int Data);
@@ -80,7 +82,6 @@ private:
 	void LeftDirectionRotate(Node* node);
 
 	// 출력을 위한 것
-	int GetMaxDepth() const;
 	RowList GetRowList(int maxDepth) const;
 	vector<string> FormatRow(const RowList& rowList) const;
 	void TrimRow(vector<string>& rows);

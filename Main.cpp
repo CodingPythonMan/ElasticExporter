@@ -3,8 +3,49 @@
 #include <iostream>
 using namespace std;
 
-RedBlackTree tree;
 Test test;
+
+void TestCase001()
+{
+	RedBlackTree redblackTree;
+	for(int i=0 ; i< 10; i++)
+		redblackTree.Insert(i);
+
+
+	for (int i = 0; i < 5; i++)
+		redblackTree.Delete(i);
+
+	redblackTree.Insert(10);
+	redblackTree.Insert(3);
+	redblackTree.Insert(11);
+	redblackTree.Insert(0);
+	redblackTree.Insert(15);
+	redblackTree.Insert(4);
+	redblackTree.Insert(17);
+
+	for (int i = 6; i < 11; i++)
+	{
+		redblackTree.Delete(i);
+		redblackTree.Print();
+	}
+}
+
+void TestCase002()
+{
+	RedBlackTree redblackTree;
+	for (int i = 1; i < 11; i++)
+		redblackTree.Insert(i);
+
+
+	for (int i = 10; i > 6; i--)
+		redblackTree.Delete(i);
+
+	redblackTree.Insert(4);
+	redblackTree.Delete(6);
+	//redblackTree.Delete(3);
+
+	redblackTree.Print();
+}
 
 void TestAutoTree()
 {
@@ -22,7 +63,6 @@ void TestRandomNumberTree()
 void TestManualTree()
 {
 	RedBlackTree tree;
-	Test test;
 	int Data;
 	int Menu;
 
@@ -79,32 +119,10 @@ int main()
 	// Test 때 확인할 것.
 	//TestManualTree();
 
-	// 의사 난수 삽입,삭제 테스트
+	// 삽입, 삭제 신뢰성 테스트
 	TestRandomNumberTree();
 
-	/*
-	RedBlackTree redblackTree;
-	for(int i=0 ; i< 10; i++)
-		redblackTree.Insert(i);
-
-
-	for (int i = 0; i < 5; i++)
-		redblackTree.Delete(i);
-
-	redblackTree.Insert(10);
-	redblackTree.Insert(3);
-	redblackTree.Insert(11);
-	redblackTree.Insert(0);
-	redblackTree.Insert(15);
-	redblackTree.Insert(4);
-	redblackTree.Insert(17);
-
-	for (int i = 6; i < 11; i++)
-	{
-		redblackTree.Delete(i);
-		redblackTree.Print();
-	}*/
-
-	// 삽입, 삭제 속도 테스트
-
+	// 테스트 케이스
+	//TestCase001();
+	//TestCase002();
 }

@@ -278,7 +278,7 @@ void RedBlackTree::InsertBalance(Node* node)
 					LeftDirectionRotate(node);
 					node = node->Left;
 				}
-					
+				
 				RightDirectionRotate(node->Parent);
 				// 색깔 설정
 				node->Parent->Color = NODE_COLOR::BLACK;
@@ -327,10 +327,13 @@ void RedBlackTree::DeleteBalance(Node* node)
 	Node* Parent = node->Parent;
 	while (1)
 	{
-		// 루트까지 올라왔다면 종료
+		// 루트까지 올라왔다면 Root 를 블랙으로 만들고 종료
 		if (node == _Root)
+		{
+			_Root->Color = NODE_COLOR::BLACK;
 			return;
-
+		}
+			
 		// 2.1 조건
 		if (node->Color == NODE_COLOR::RED)
 		{

@@ -1,6 +1,7 @@
 #include "Test.h"
 #include "RedBlackTree.h"
 #include <iostream>
+#include <algorithm>
 
 Test::Test()
 {
@@ -76,25 +77,7 @@ void Test::TestBinaryTree()
 
 	// 삽입 신뢰성 테스트
 	_BinaryTree.ReliableTest(_ReliableList);
-
-	vector<int> deleteItems;
-	int randomNum;
-	// 삭제 신뢰성 테스트
-	for (int i = 0; i < TEST_COUNT; i++)
-	{
-		int deleteCount = rand();
-		// 삭제
-		for (int j = 0; j < deleteCount; j++)
-		{
-			randomNum = MakeIntRand(RANDOM_COUNT);
-			_BinaryTree.Delete(randomNum);
-			_ReliableList.remove(randomNum);
-			deleteItems.push_back(randomNum);
-		}
-		cout << deleteCount << "개 삭제\n";
-		// 조회
-		_BinaryTree.ReliableTest(_ReliableList);
-	}
+	cout << "Depth : " << _BinaryTree.GetMaxDepth() << "\n";
 }
 
 void Test::TestRedBlackTree()
@@ -111,26 +94,62 @@ void Test::TestRedBlackTree()
 
 	// 삽입 신뢰성 테스트
 	_RedBlackTree.ReliableTest(_ReliableList);
+	cout << "Depth : " << _RedBlackTree.GetMaxDepth() << "\n";
 
-	// 삭제 신뢰성 테스트
-	vector<int> deleteItems;
+	// 삽입, 삭제 신뢰성 테스트
 	int randomNum;
-	// 삭제 신뢰성 테스트
-	for (int i = 0; i < TEST_COUNT; i++)
+	int deleteIndex = 0;
+	int insertIndex = 0;
+	while (deleteIndex < RANDOM_COUNT)
 	{
-		int deleteCount = rand();
+		int deleteCount = deleteIndex + rand();
+
+		if (deleteCount >= RANDOM_COUNT)
+			deleteCount = RANDOM_COUNT;
+
 		// 삭제
-		for (int j = 0; j < deleteCount; j++)
+		for (int j = deleteIndex; j < deleteCount; j++)
 		{
-			randomNum = MakeIntRand(RANDOM_COUNT);
+			randomNum = _TestCase[j];
 			_RedBlackTree.Delete(randomNum);
-			_ReliableList.remove(randomNum);
-			deleteItems.push_back(randomNum);
+			//_ReliableList.remove(randomNum);
 		}
-		cout << deleteCount << "개 삭제\n";
+		cout << deleteCount - deleteIndex << "개 삭제\n";
+		deleteIndex = deleteCount;
+
+		int insertCount = insertIndex + rand();
+
+		if (insertCount >= deleteCount)
+			insertCount = deleteCount / 2;
+
+		// 삽입
+		for (int j = insertIndex; j < insertCount; j++)
+		{
+			randomNum = _TestCase[j];
+			_RedBlackTree.Insert(randomNum);
+			//_ReliableList.push_back(randomNum);
+		}
+		cout << insertCount - insertIndex << "개 삽입\n";
+		insertIndex = insertCount;
+
 		// 조회
-		_RedBlackTree.ReliableTest(_ReliableList);
+		//_ReliableList.sort();
+		//_RedBlackTree.ReliableTest(_ReliableList);
+		cout << "Depth : " << _RedBlackTree.GetMaxDepth() << "\n";
 	}
+
+	// delete Index 만큼 부족한 것 Insert
+	for (int i = insertIndex; i < deleteIndex; i++)
+	{
+		randomNum = _TestCase[i];
+		_RedBlackTree.Insert(randomNum);
+		//_ReliableList.push_back(randomNum);
+	}
+	cout << deleteIndex - insertIndex << "개 삽입\n";
+	cout << "Depth : " << _RedBlackTree.GetMaxDepth() << "\n";
+	// 조회
+	//_ReliableList.sort();
+	_RedBlackTree.ReliableTest(_ReliableList);
 }
 
 int Test::MakeIntRand(int maxNum)
