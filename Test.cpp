@@ -12,55 +12,54 @@ Test::~Test()
 {
 }
 
-void Test::CalculateInsertTime()
+void Test::CalculateTime()
 {
 	LARGE_INTEGER Start, End;
 	double cal;
 
-	cout << "[순차적(오름차순)] " << INC_COUNT << "\n";
-	QueryPerformanceCounter(&Start);
-	// 순차적인 데이터(오름차순)
-	for (int i = 0; i < INC_COUNT; i++)
-	{
-		_BinaryTree.Insert(i);
-	}
-	QueryPerformanceCounter(&End);
+	RedBlackTree redBlackTree;
+	BinaryTree binaryTree;
+	MakeTestCase(INSERT_COUNT);
 
-	cal = (End.QuadPart - Start.QuadPart) / (double)_Freq.QuadPart;
-	cout << "Binary Tree Insert : " << cal << "\n";
-
-	QueryPerformanceCounter(&Start);
-	// 순차적인 데이터(오름차순)
-	for (int i = 0; i < INC_COUNT; i++)
-	{
-		_RedBlackTree.Insert(i);
-	}
-	QueryPerformanceCounter(&End);
-
-	cal = (End.QuadPart - Start.QuadPart) / (double)_Freq.QuadPart;
-	cout << "Red Black Tree Insert : " << cal << "\n\n";
-
-	RedBlackTree RandomRedBlackTree;
-	BinaryTree RandomBinaryTree;
-	MakeTestCase();
-
-	cout << "[비순차적(랜덤)] " << RANDOM_COUNT <<  " \n";
+	std::cout << "[Binary Tree 삽입] " << INSERT_COUNT << " \n";
 	// 비순차적인 데이터
 	QueryPerformanceCounter(&Start);
-	for (auto iter = _TestCase.begin(); iter != _TestCase.end(); ++iter)
-		RandomBinaryTree.Insert(*iter);
+	for (int i = 0; i < INSERT_COUNT; i++)
+		binaryTree.Insert(_TestCase[i]);
 	QueryPerformanceCounter(&End);
 
 	cal = (End.QuadPart - Start.QuadPart) / (double)_Freq.QuadPart;
 	cout << "Binary Tree Insert : " << cal << "\n";
 
+	cout << "[Binary Tree 삭제] " << DELETE_COUNT << " \n";
+	// 비순차적인 데이터
 	QueryPerformanceCounter(&Start);
-	for (auto iter = _TestCase.begin(); iter != _TestCase.end(); ++iter)
-		RandomRedBlackTree.Insert(*iter);
+	for (int i = 0; i < DELETE_COUNT; i++)
+		binaryTree.Delete(_TestCase[i]);
+	QueryPerformanceCounter(&End);
+
+	cal = (End.QuadPart - Start.QuadPart) / (double)_Freq.QuadPart;
+	cout << "Binary Tree Delete : " << cal << "\n";
+
+	cout << "[Red Black Tree 삽입] " << INSERT_COUNT << " \n";
+	// 비순차적인 데이터
+	QueryPerformanceCounter(&Start);
+	for (int i = 0; i < INSERT_COUNT; i++)
+		redBlackTree.Insert(_TestCase[i]);
 	QueryPerformanceCounter(&End);
 
 	cal = (End.QuadPart - Start.QuadPart) / (double)_Freq.QuadPart;
 	cout << "Red Black Tree Insert : " << cal << "\n";
+
+	cout << "[Red Black Tree 삭제] " << DELETE_COUNT << " \n";
+	// 비순차적인 데이터
+	QueryPerformanceCounter(&Start);
+	for (int i = 0; i < DELETE_COUNT; i++)
+		redBlackTree.Delete(_TestCase[i]);
+	QueryPerformanceCounter(&End);
+
+	cal = (End.QuadPart - Start.QuadPart) / (double)_Freq.QuadPart;
+	cout << "Red Black Tree Delete : " << cal << "\n";
 }
 
 void Test::TestBinaryTree()
@@ -164,18 +163,18 @@ int Test::MakeIntRand(int maxNum)
 	return (int)num;
 }
 
-void Test::MakeTestCase()
+void Test::MakeTestCase(int Count)
 {
 	_TestCase.clear();
 
 	// 순차적인 값을 가진 리스트를 준비하고 셔플한다.
-	for (int i = 0; i < RANDOM_COUNT; i++)
+	for (int i = 0; i < Count; i++)
 	{
 		_TestCase.push_back(i);
 	}
 
-	for (int i = 0; i < RANDOM_COUNT; i++)
-		Shuffle(_TestCase[i], _TestCase[MakeIntRand(RANDOM_COUNT)]);
+	for (int i = 0; i < Count; i++)
+		Shuffle(_TestCase[i], _TestCase[MakeIntRand(Count)]);
 }
 
 void Test::Shuffle(int& num1, int& num2)

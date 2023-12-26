@@ -49,7 +49,7 @@ void TestCase002()
 
 void TestAutoTree()
 {
-	test.CalculateInsertTime();
+	test.CalculateTime();
 }
 
 // 의사 난수 만들어 테스트
@@ -120,7 +120,10 @@ int main()
 	//TestManualTree();
 
 	// 삽입, 삭제 신뢰성 테스트
-	TestRandomNumberTree();
+	//TestRandomNumberTree();
+
+	// 삽입, 삭제 시간 테스트
+	TestAutoTree();
 
 	// 테스트 케이스
 	//TestCase001();

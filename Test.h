@@ -4,17 +4,18 @@
 #include <Windows.h>
 #include <profileapi.h>
 
-#define INC_COUNT 1000
-#define RANDOM_COUNT 60000
+#define RANDOM_COUNT 30000
+#define INSERT_COUNT 300000
+#define DELETE_COUNT 1000
 
 class Test {
 public:
 	Test();
 	virtual ~Test();
 
-	void CalculateInsertTime();
+	void CalculateTime();
 
-	void MakeTestCase();
+	void MakeTestCase(int Count = RANDOM_COUNT);
 	void TestBinaryTree();
 	void TestRedBlackTree();
 
