@@ -151,6 +151,19 @@ void Test::TestRedBlackTree()
 	_RedBlackTree.ReliableTest(_ReliableList);
 }
 
+void Test::TestTree001()
+{
+	BinaryTree binaryTree;
+
+	for (auto iter = _TestCase.begin(); iter != _TestCase.end(); ++iter)
+		binaryTree.Insert(*iter);
+
+	binaryTree.Delete(40340);
+
+	binaryTree.Insert(40340);
+	binaryTree.Delete(40340);
+}
+
 int Test::MakeIntRand(int maxNum)
 {
 	unsigned int num = rand();

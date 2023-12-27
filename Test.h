@@ -6,7 +6,7 @@
 
 #define RANDOM_COUNT 30000
 #define INSERT_COUNT 300000
-#define DELETE_COUNT 1000
+#define DELETE_COUNT 300000
 
 class Test {
 public:
@@ -18,6 +18,8 @@ public:
 	void MakeTestCase(int Count = RANDOM_COUNT);
 	void TestBinaryTree();
 	void TestRedBlackTree();
+
+	void TestTree001();
 
 private:
 	void Shuffle(int& num1, int& num2);

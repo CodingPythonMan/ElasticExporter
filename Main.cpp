@@ -32,19 +32,8 @@ void TestCase001()
 
 void TestCase002()
 {
-	RedBlackTree redblackTree;
-	for (int i = 1; i < 11; i++)
-		redblackTree.Insert(i);
-
-
-	for (int i = 10; i > 6; i--)
-		redblackTree.Delete(i);
-
-	redblackTree.Insert(4);
-	redblackTree.Delete(6);
-	//redblackTree.Delete(3);
-
-	redblackTree.Print();
+	test.MakeTestCase();
+	test.TestTree001();
 }
 
 void TestAutoTree()
@@ -78,19 +67,25 @@ void TestManualTree()
 		case 1:
 			cout << ">> ";
 			cin >> Data;
-			tree.Insert(Data);
-			tree.Print();
+			if (true == tree.Insert(Data))
+			{
+				tree.Print();
+			}
+			else
+			{
+				cout << "이미 데이터가 존재합니다.\n";
+			}
 			break;
 		case 2:
 			cout << ">> ";
 			cin >> Data;
 			if (true == tree.Find(Data))
 			{
-				cout << "데이터가 존재함.\n";
+				cout << "데이터가 존재합니다.\n";
 			}
 			else
 			{
-				cout << "데이터가 존재하지 않음.\n";
+				cout << "데이터가 존재하지 않습니다.\n";
 			}
 			break;
 		case 3:
@@ -117,13 +112,13 @@ void TestManualTree()
 int main()
 {
 	// Test 때 확인할 것.
-	//TestManualTree();
+	TestManualTree();
 
 	// 삽입, 삭제 신뢰성 테스트
 	//TestRandomNumberTree();
 
 	// 삽입, 삭제 시간 테스트
-	TestAutoTree();
+	//TestAutoTree();
 
 	// 테스트 케이스
 	//TestCase001();

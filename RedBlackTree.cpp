@@ -90,13 +90,141 @@ bool RedBlackTree::Insert(int Data)
 
 bool RedBlackTree::Delete(int Data)
 {
-	// 순회 코드
-	return Delete(_Root, Data);
+	if (_Root == _Nil)
+		return false;
+
+	Node* node = _Root;
+	while (1)
+	{
+		if (Data < node->Data)
+		{
+			if (node->Left == _Nil)
+				break;
+			else
+				node = node->Left;
+		}
+		else if (Data == node->Data)
+		{
+			// 자식 둘다 있을 경우
+			if (node->Left != _Nil && node->Right != _Nil)
+			{
+				// 왼쪽의 맨 오른쪽으로 접근하고, 해당 node 설정 후 삭제.
+				Node* thisNode = node;
+				node = node->Left;
+				while (node->Right != _Nil)
+					node = node->Right;
+				thisNode->Data = node->Data;
+				// 여기서 return 되지 않는 이유는 node 는 지워질 때 아래 사항 고려.
+			}
+
+			// Root 면 Parent 관련 설정할 필요가 없다.
+			if (node == _Root)
+			{
+				if (node->Left != _Nil)
+				{
+					_Root = node->Left;
+				}
+				else if (node->Right != _Nil)
+				{
+					_Root = node->Right;
+				}
+				else
+				{
+					_Root = _Nil;
+				}
+				delete node;
+				return true;
+			}
+
+			Node* ChildNode;
+			NODE_COLOR nodeColor = node->Color;
+			// 왼쪽 자식이 있는 경우
+			if (node->Left != _Nil)
+			{
+				if (node->Parent->Left == node)
+				{
+					node->Parent->Left = node->Left;
+				}
+				else
+				{
+					node->Parent->Right = node->Left;
+				}
+				node->Left->Parent = node->Parent;
+				ChildNode = node->Left;
+			}
+			// 오른 자식이 있는 경우
+			else if (node->Right != _Nil)
+			{
+				if (node->Parent->Left == node)
+				{
+					node->Parent->Left = node->Right;
+				}
+				else
+				{
+					node->Parent->Right = node->Right;
+				}
+				node->Right->Parent = node->Parent;
+				ChildNode = node->Right;
+			}
+			// 자식이 없는 경우
+			else
+			{
+				if (node->Parent->Left == node)
+				{
+					node->Parent->Left = _Nil;
+				}
+				else
+				{
+					node->Parent->Right = _Nil;
+				}
+				ChildNode = _Nil;
+				ChildNode->Parent = node->Parent;
+			}
+			delete node;
+			if (nodeColor == NODE_COLOR::BLACK)
+				DeleteBalance(ChildNode);
+
+			return true;
+		}
+		else
+		{
+			if (node->Right == _Nil)
+				break;
+			else
+				node = node->Right;
+		}
+	}
+
+	return false;
 }
 
 bool RedBlackTree::Find(int Data)
 {
-	return Find(_Root, Data);
+	if (_Root == _Nil)
+		return false;
+
+	Node* node = _Root;
+	while (1)
+	{
+		if (Data < node->Data)
+		{
+			if (node->Left == _Nil)
+				break;
+			else
+				node = node->Left;
+		}
+		else if (Data == node->Data)
+			return true;
+		else
+		{
+			if (node->Right == _Nil)
+				break;
+			else
+				node = node->Right;
+		}
+	}
+
+	return false;
 }
 
 void RedBlackTree::Print()
@@ -118,124 +246,6 @@ void RedBlackTree::Print()
 	{
 		cout << ' ' << row << '\n';
 	}
-}
-
-bool RedBlackTree::Delete(Node* node, int Data)
-{
-	if (node == _Nil)
-		return false;
-
-	bool leftResult, rightResult;
-	leftResult = Delete(node->Left, Data);
-	// 데이터에 대한 값 처리할 때 하위 있는지 확인 필요
-	if (Data == node->Data)
-	{
-		// 자식 둘다 있을 경우
-		if (node->Left != _Nil && node->Right != _Nil)
-		{
-			// 왼쪽의 맨 오른쪽으로 접근하고, 해당 node 설정 후 삭제.
-			Node* thisNode = node;
-			node = node->Left;
-			while (node->Right != _Nil)
-			{
-				node = node->Right;
-			}
-			thisNode->Data = node->Data;
-			// 여기서 return 되지 않는 이유는 node 는 지워질 때 아래 사항 고려.
-		}
-
-		// Root 면 Parent 관련 설정할 필요가 없다.
-		if (node == _Root)
-		{
-			if (node->Left != _Nil)
-			{
-				_Root = node->Left;
-			}
-			else if (node->Right != _Nil)
-			{
-				_Root = node->Right;
-			}
-			else
-			{
-				_Root = _Nil;
-			}
-			// Nil 은 Black 이 되어도 된다.
-			_Root->Color = NODE_COLOR::BLACK;
-			delete node;
-			return true;
-		}
-		
-		Node* ChildNode;
-		NODE_COLOR nodeColor = node->Color;
-		// 왼쪽 자식이 있는 경우
-		if (node->Left != _Nil)
-		{
-			if (node->Parent->Left == node)
-			{
-				node->Parent->Left = node->Left;
-			}
-			else
-			{
-				node->Parent->Right = node->Left;
-			}
-			node->Left->Parent = node->Parent;
-			ChildNode = node->Left;
-		}
-		// 오른 자식이 있는 경우
-		else if (node->Right != _Nil)
-		{
-			if (node->Parent->Left == node)
-			{
-				node->Parent->Left = node->Right;
-			}
-			else
-			{
-				node->Parent->Right = node->Right;
-			}
-			node->Right->Parent = node->Parent;
-			ChildNode = node->Right;
-		}
-		// 자식이 없는 경우
-		else
-		{
-			if (node->Parent->Left == node)
-			{
-				node->Parent->Left = _Nil;
-			}
-			else
-			{
-				node->Parent->Right = _Nil;
-			}
-			ChildNode = _Nil;
-			ChildNode->Parent = node->Parent;
-		}
-		delete node;
-		if (nodeColor == NODE_COLOR::BLACK)
-		{
-			DeleteBalance(ChildNode);
-		}
-		return true;
-	}
-	rightResult = Delete(node->Right, Data);
-
-	return leftResult || rightResult;
-}
-
-bool RedBlackTree::Find(Node* node, int Data)
-{
-	if (node == nullptr)
-		return false;
-
-	bool leftResult, rightResult;
-
-	leftResult = Find(node->Left, Data);
-	if (node->Data == Data)
-	{
-		return true;
-	}
-	rightResult = Find(node->Right, Data);
-
-	return leftResult || rightResult;
 }
 
 void RedBlackTree::DeleteDestructor(Node* node)

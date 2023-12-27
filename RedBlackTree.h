@@ -68,9 +68,6 @@ public:
 	int GetMaxDepth() const;
 
 private:
-	bool Delete(Node* node, int Data);
-	bool Find(Node* node, int Data);
-
 	void DeleteDestructor(Node* node);
 
 	// Red-Black Tree 를 위한 것
