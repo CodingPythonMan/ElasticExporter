@@ -445,13 +445,13 @@ void BinaryTree::TrimRow(vector<string>& rows)
 	}
 }
 
-void BinaryTree::ReliableTest(const list<int>& ReliableList)
+void BinaryTree::ReliableTest(const set<int>& ReliableSet)
 {
-	_ReliableList = ReliableList;
-	_Iter = _ReliableList.begin();
+	_ReliableSet = ReliableSet;
+	_Iter = _ReliableSet.begin();
 	_Index = 0;
 	cout << "[Binary Tree Test]\n";
-	cout << "[Element Count] : " << ReliableList.size() << "\n";
+	cout << "[Element Count] : " << ReliableSet.size() << "\n";
 	if (Test(_Root) == true)
 	{
 		cout << "[Test Result] : Error.\n";

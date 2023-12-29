@@ -112,10 +112,10 @@ void TestManualTree()
 int main()
 {
 	// Test 때 확인할 것.
-	TestManualTree();
+	//TestManualTree();
 
 	// 삽입, 삭제 신뢰성 테스트
-	//TestRandomNumberTree();
+	TestRandomNumberTree();
 
 	// 삽입, 삭제 시간 테스트
 	//TestAutoTree();

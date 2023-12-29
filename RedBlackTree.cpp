@@ -699,13 +699,13 @@ void RedBlackTree::TrimRow(vector<string>& rows)
 	}
 }
 
-void RedBlackTree::ReliableTest(const list<int>& ReliableList)
+void RedBlackTree::ReliableTest(const set<int>& ReliableSet)
 {
-	_ReliableList = ReliableList;
-	_Iter = _ReliableList.begin();
+	_ReliableSet = ReliableSet;
+	_Iter = _ReliableSet.begin();
 	_Index = 0;
 	cout << "[Red - Black Tree Test]\n";
-	cout << "[Element Count] : " << ReliableList.size() << "\n";
+	cout << "[Element Count] : " << _ReliableSet.size() << "\n";
 	if (Test(_Root) == true)
 	{
 		cout << "[Test Result] : Error.\n";

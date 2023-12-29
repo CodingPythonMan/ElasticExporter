@@ -1,6 +1,6 @@
 #pragma once
 #include "Cell.h"
-#include <list>
+#include <set>
 
 enum class NODE_COLOR
 {
@@ -89,10 +89,10 @@ private:
 
 #ifdef _DEBUG
 public:
-	void ReliableTest(const list<int>& ReliableList);
+	void ReliableTest(const set<int>& ReliableList);
 	bool Test(Node* node);
-	list<int> _ReliableList;
-	list<int>::iterator _Iter;
+	set<int> _ReliableSet;
+	set<int>::iterator _Iter;
 	int _Index;
 #endif
 };

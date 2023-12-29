@@ -4,7 +4,7 @@
 #include <Windows.h>
 #include <profileapi.h>
 
-#define RANDOM_COUNT 30000
+#define RANDOM_COUNT 1000000
 #define INSERT_COUNT 300000
 #define DELETE_COUNT 300000
 
