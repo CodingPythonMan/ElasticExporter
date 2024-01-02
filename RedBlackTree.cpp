@@ -293,8 +293,6 @@ void RedBlackTree::InsertBalance(Node* node)
 				// »ö±ò ¼³Á¤
 				node->Parent->Color = NODE_COLOR::BLACK;
 				node->Parent->Right->Color = NODE_COLOR::RED;
-
-				node = node->Parent;
 				return;
 			}
 			else
@@ -316,8 +314,6 @@ void RedBlackTree::InsertBalance(Node* node)
 				// »ö±ò ¼³Á¤
 				node->Parent->Color = NODE_COLOR::BLACK;
 				node->Parent->Left->Color = NODE_COLOR::RED;
-
-				node = node->Parent;
 				return;
 			}
 			else

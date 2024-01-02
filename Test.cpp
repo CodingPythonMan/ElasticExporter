@@ -111,10 +111,7 @@ void Test::TestRedBlackTree()
 		cout << deleteCount - deleteIndex << "개 삭제\n";
 		deleteIndex = deleteCount;
 
-		int insertCount = insertIndex + rand();
-
-		if (insertCount >= deleteCount)
-			insertCount = deleteCount / 2;
+		int insertCount = deleteCount / 2;
 
 		// 삽입
 		for (int j = insertIndex; j < insertCount; j++)

@@ -5,8 +5,8 @@
 #include <profileapi.h>
 
 #define RANDOM_COUNT 1000000
-#define INSERT_COUNT 300000
-#define DELETE_COUNT 300000
+#define INSERT_COUNT 600000
+#define DELETE_COUNT 600000
 
 class Test {
 public:
